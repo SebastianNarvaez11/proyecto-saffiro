@@ -13,6 +13,7 @@ class UserListView(Permisos, ListView):
     model = User
 
     # no mostrar en la lista, ni el usuario actual, ni los super usuarios
+    # solo mostrar los usuarios que 
     def get_queryset(self):
         return User.objects.exclude(is_superuser=True).exclude(id=self.request.user.id)
 

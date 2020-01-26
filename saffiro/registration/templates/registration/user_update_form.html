@@ -1,4 +1,11 @@
 {% load static %}
+<style>
+    .imagen {
+        object-fit: cover;
+        height: 70px;
+    }
+</style>
+
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         <form id="formulario" action="{% url 'user_urls:update' user.id %}" role="form" class="form-control-line"
@@ -9,101 +16,74 @@
                     <h4 class="m-b-0 text-white mt-2 mb-2">Actualizar Usuario</h4>
                 </div>
                 <div class="card-body little-profile">
-                    <style>
-                        .imagen {
-                            object-fit: cover;
-                            height: 70px;
-                        }
-                    </style>
-                    <div class="float-right pro-img"><img class="img-thumbnail imagen" src="{{user.foto.url}}"
-                            alt="user" /></div>
                     <div class="container">
                         <div class="row">
-
-
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="id_username">Nombre de usuario:</label>
-                                        <input name="username" id="id_username" required type="text"
-                                            class="form-control"
-                                            value="{% if form.username.value %}{{form.username.value}}{%endif%}">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                                <div class="form-group">
+                                    <label for="id_username">Nombre de usuario:</label>
+                                    <input name="username" id="id_username" required type="text" class="form-control"
+                                        value="{% if form.username.value %}{{form.username.value}}{%endif%}">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                                <div class="float-right pro-img"><img class="img-thumbnail imagen"
+                                        src="{{user.foto.url}}" alt="user" /></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="id_first_name">Nombre:</label>
+                                    <input name="first_name" id="id_first_name" required type="text"
+                                        class="form-control"
+                                        value="{% if form.first_name.value %}{{form.first_name.value}}{%endif%}">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="id_last_name">Apellido:</label>
+                                    <input name="last_name" id="id_last_name" required type="text" class="form-control"
+                                        value="{% if form.last_name.value %}{{form.last_name.value}}{%endif%}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label for="id_empresa">Empresa:</label>
+                                {{form.empresa}}
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="id_email">Email:</label>
+                                    <input name="email" id="id_email" required type="email" class="form-control"
+                                        value="{% if form.email.value %}{{form.email.value}}{%endif%}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <label for="id_foto">Foto:</label>
+                                <input type="file" name="foto" class="form-control-file " id="id_foto">
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="form-group">
+                                    <div class="demo-checkbox">
+                                        <input type="checkbox" name="is_active" id="id_is_active" class="filled-in"
+                                            {% if user.is_active %} checked {% endif %} />
+                                        <label for="id_is_active">Activo/Inactivo</label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="id_first_name">Nombre:</label>
-                                        <input name="first_name" id="id_first_name" required type="text"
-                                            class="form-control"
-                                            value="{% if form.first_name.value %}{{form.first_name.value}}{%endif%}">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="id_last_name">Apellido:</label>
-                                        <input name="last_name" id="id_last_name" required type="text"
-                                            class="form-control"
-                                            value="{% if form.last_name.value %}{{form.last_name.value}}{%endif%}">
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="row mt-2 border-top border-bottom border-success">
+                            <div class="col-lg-6 mt-3 mb-3">
+                                <label for="id_groups">Permisos:</label>
+                                {{form.groups}}
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <label for="id_empresa">Empresa:</label>
-                                    {{form.empresa}}
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="id_email">Email:</label>
-                                        <input name="email" id="id_email" required type="email" class="form-control"
-                                            value="{% if form.email.value %}{{form.email.value}}{%endif%}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-7">
-                                    <label for="id_foto">Foto:</label>
-                                    {{form.foto}}
-                                </div>
-                                <div class="col-lg-5">
-                                    <div class="form-group">
-                                        <div class="demo-checkbox">
-                                            <input type="checkbox" name="is_active" id="id_is_active" class="filled-in"
-                                                {% if user.is_active %} checked {% endif %} />
-                                            <label for="id_is_active">Activo/Inactivo</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-2 border-top border-bottom border-success">
-                                <div class="col-lg-6 mt-3 mb-3">
-                                    <label for="id_groups">Permisos:</label>
-                                    {{form.groups}}
-                                </div>
-                                <div class="col-lg-6 d-flex align-items-center">
-                                    <p>Permisos específicos para este usuario. Mantenga presionado "Control" o "Command"
-                                        en
-                                        un Mac, para seleccionar más de una opción.</p>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="id_password1">Contraseña:</label>
-                                        <input type="password" class="form-control" required name="password1"
-                                            id="id_password1"
-                                            value="{% if form.password1.value %}{{form.password1.value}}{%endif%}">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="id_password2">Repite la contraseña:</label>
-                                        <input type="password" class="form-control form-control-user" required
-                                            name="password2" id="id_password2">
-                                    </div>
-                                </div>
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <p>Permisos específicos para este usuario. Mantenga presionado "Control" o "Command"
+                                    en
+                                    un Mac, para seleccionar más de una opción.</p>
                             </div>
                         </div>
                     </div>

@@ -20,6 +20,7 @@ class Empresa(models.Model):
     telefono = models.CharField('Telefono', max_length=20, null=True)
     creacion = models.DateField('Fecha de creacion', auto_now_add=True)
     edicion = models.DateField('Fecha de edicion', auto_now=True)
+    removed = models.BooleanField('Eliminado', default=False)
 
     class Meta:
         verbose_name = 'Empresa'
