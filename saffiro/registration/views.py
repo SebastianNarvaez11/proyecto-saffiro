@@ -2,10 +2,11 @@ from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from core.views import Permisos
 from .models import User
-from .forms import UserForm, ChangeEmpresaForm
+from .forms import UserForm, ChangeEmpresaForm, UserUpdateForm
 from django.urls import reverse_lazy
 
 # Create your views here.
+
 
 class UserListView(Permisos, ListView):
     permission_required = 'auth.view_user'
@@ -15,7 +16,6 @@ class UserListView(Permisos, ListView):
     def get_queryset(self):
         return User.objects.exclude(is_superuser=True).exclude(id=self.request.user.id)
 
-        
 
 class UserCreateView(Permisos, CreateView):
     permission_required = 'auth.add_user'
@@ -34,10 +34,26 @@ class UserCreateView(Permisos, CreateView):
 
 
 
+class UserUpdateView(Permisos, UpdateView):
+    permission_required = 'auth.change_user'
+    model = User
+    form_class = UserUpdateForm
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('user_urls:list')
+    success_message = 'Usuario actualizado satisfactoriamente'
+
+    # funcion le cambia los permisos(grupos) al usuario despues de actualizarlo
+    def form_valid(self, form):
+        user = form.save()
+        grupos = form.cleaned_data.get("groups")
+        user.groups.set(grupos)
+        return super().form_valid(form)
+
 
 
 class ChangeEmpresaView(Permisos, UpdateView):
-    permission_required = 'empresa.add_empresa'#se le pone este permiso, ya que el administrador sera el unico que lo tendra
+    # se le pone este permiso, ya que el administrador sera el unico que lo tendra
+    permission_required = 'empresa.add_empresa'
     model = User
     form_class = ChangeEmpresaForm
     template_name = 'registration/empresa_change.html'
@@ -48,7 +64,3 @@ class ChangeEmpresaView(Permisos, UpdateView):
     def get_object(self):
         user = self.request.user
         return user
-
-
-
-
