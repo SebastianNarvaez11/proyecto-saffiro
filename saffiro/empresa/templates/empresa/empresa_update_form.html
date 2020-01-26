@@ -1,0 +1,110 @@
+{% load static %}
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form id="formulario" action="{% url 'empresa_urls:update' empresa.id %}" role="form" class="form-control-line"
+            method="POST">
+            {% csrf_token %}
+            <div class="card card-outline-warning">
+                <div class="card-header">
+                    <h4 class="m-b-0 text-white mt-2 mb-2">Actualizar Empresa</h4>
+                </div>
+                <div class="card-body little-profile">
+                    <div class="float-right pro-img"><img class="img-thumbnail" src="{{empresa.logo.url}}" alt="user" />
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="id_nombre">Nombre:</label>
+                                    <input name="nombre" id="id_nombre" required type="text" class="form-control"
+                                        value="{% if form.nombre.value %}{{form.nombre.value}}{%endif%}">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="id_direccion">Direccion:</label>
+                                    <input name="direccion" id="id_direccion" required type="text"
+                                        class="form-control form-control-line"
+                                        value="{% if form.direccion.value %}{{form.direccion.value}}{%endif%}">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="id_telefono">Telefono:</label>
+                                    <input name="telefono" id="id_telefono" required type="text"
+                                        class="form-control form-control-line"
+                                        value="{% if form.telefono.value %}{{form.telefono.value}}{%endif%}">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="id_logo">Logo:</label>
+                                    <input type="file" name="logo" class="form-control-file" id="id_logo"
+                                        value="{% if form.logo.value %}{{form.logo.value}}{%endif%}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Actualizar</button>
+                <a href="" onclick="return cerrar_modal()" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+
+        var url = $('#formulario').attr("action");
+        var token = jQuery("[name=csrfmiddlewaretoken]").val();
+
+        $("form").submit(function (e) {
+            e.preventDefault();
+
+            //toca hacerlo sin el serealizeArray porque no captura la imagen
+            var form = $('#formulario')[0];
+            var formData = new FormData(form);
+
+            $.ajax({
+                url: url,
+                method: "POST",
+                headers: { 'X-CSRFToken': token },
+                processData: false,
+                contentType: false,
+                data: formData,
+            })
+                .done(function (r, textStatus, xhr) {
+                    if (xhr.status = 200) {
+                        cerrar_modal()
+                        setTimeout('document.location.reload()', 1000);
+                        mensaje('Empresa actualizada satisfactoriamente', 'success');
+                    }
+                    else {
+                        mensaje(textStatus, 'error');
+                    }
+                }).fail(function (error) {
+
+                    var x = document.getElementById("formulario");
+                    for (i = 0; i < x.length; i++) {
+                        x.elements[i].style.borderColor = "green";
+                    }
+
+                    var r = error.responseJSON
+                    for (var clave in r) {
+                        // Controlando que json realmente tenga esa propiedad
+                        if (r.hasOwnProperty(clave)) {
+                            // Mostrando en pantalla la clave junto a su valor
+                            var input = 'id_' + String(clave);
+                            document.getElementById(input).style.borderColor = "red";
+                            document.getElementById(input).style.outlineColor = "red";
+                            mensaje(String(r[clave]), 'error')
+                        }
+                    }
+                })
+        })
+    });
+</script>

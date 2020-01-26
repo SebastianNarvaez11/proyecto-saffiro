@@ -1,0 +1,69 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contend %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadown card-outline-primary">
+            <div class="card-header">
+                <h4 class="m-b-0 text-white">Usuarios</h4>
+            </div>
+            <div class="card-body">
+                <h6 class="card-subtitle">Gestione los usuarios de sus empleados de forma ordenada y segura.</h6>
+                <button type="button" class="btn waves-effect waves-light btn-success mb-3"
+                    onclick="return abrir_modal('{% url 'user_urls:create' %}')">
+                    + Crear un nuevo usuario.
+                </button>
+
+                <div class="table-responsive">
+                    {% if not user_list %}
+                    <div class="alert alert-info" role="alert">
+                        No hay usuarios para mostrar
+                    </div>
+                    {% else %}
+                    <table class="table table-hover earning-box">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Usuario</th>
+                                <th>Empresa</th>
+                                <th>Email</th>
+                                <th>Ultima seccion</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in user_list %}
+                            <tr>
+                                <td style="width:50px;">
+                                    <span class="round"><img {% if user.foto %} src="{{user.foto.url}}" {% else %} src="{% static 'core/assets/images/no-avatar.jpg' %}" {% endif %} alt="user" width="50"
+                                            height="50"></span>
+                                </td>
+                                <td>
+                                    <h6>{{user.first_name}} {{user.last_name}}</h6>
+                                    <small class="text-muted">
+                                        {% for group in user.groups.all %}{{group}}{% if not forloop.last %},
+                                        {%endif%}{% endfor %}
+                                    </small>
+                                </td>
+                                <td>{{user.empresa}}</td>
+                                <td>{{user.email}}</td>
+                                <td>{{user.last_login}}</td>
+                                <td>{{user.is_active|yesno:"Activo,Inactivo"}}</td>
+                                <td><button type="button" class="btn waves-effect waves-warning btn-warning">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    <button type="button" class="btn waves-effect waves-danger btn-danger">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contend %}

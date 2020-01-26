@@ -1,0 +1,156 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <form id="formulario" action="{% url 'user_urls:create' %}" role="form" class="form-control-line" method="POST">
+            {% csrf_token %}
+            <div class="card card-outline-success mb-0">
+                <div class="card-header">
+                    <h4 class="m-b-0 text-white mt-2 mb-2">Nuevo Usurio
+                        <i class="fa fa-building-o fa-2x text-white float-right"></i>
+                    </h4>
+                </div>
+                <div class="card-body little-profile">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="id_username">Nombre de usuario:</label>
+                                    <input name="username" id="id_username" required type="text" class="form-control"
+                                        value="{% if form.nombre.value %}{{form.username.value}}{%endif%}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="id_first_name">Nombre:</label>
+                                    <input name="first_name" id="id_first_name" required type="text"
+                                        class="form-control"
+                                        value="{% if form.first_name.value %}{{form.first_name.value}}{%endif%}">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="id_last_name">Apellido:</label>
+                                    <input name="last_name" id="id_last_name" required type="text" class="form-control"
+                                        value="{% if form.last_name.value %}{{form.last_name.value}}{%endif%}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label for="id_empresa">Empresa:</label>
+                                {{form.empresa}}
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="id_email">Email:</label>
+                                    <input name="email" id="id_email" required type="email" class="form-control"
+                                        value="{% if form.email.value %}{{form.email.value}}{%endif%}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <label for="id_foto">Foto:</label>
+                                {{form.foto}}
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="form-group">
+                                    <div class="demo-checkbox">
+                                        <input type="checkbox" name="is_active" id="id_is_active" class="filled-in"
+                                            {% if user.is_active %} checked {% endif %} />
+                                        <label for="id_is_active">Activo/Inactivo</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2 border-top border-bottom border-success">
+                            <div class="col-lg-6 mt-3 mb-3">
+                                <label for="id_groups">Permisos:</label>
+                                {{form.groups}}
+                            </div>
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <p>Permisos específicos para este usuario. Mantenga presionado "Control" o "Command" en
+                                    un Mac, para seleccionar más de una opción.</p>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="id_password1">Contraseña:</label>
+                                    <input type="password" class="form-control" required name="password1"
+                                        id="id_password1"
+                                        value="{% if form.password1.value %}{{form.password1.value}}{%endif%}">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="id_password2">Repite la contraseña:</label>
+                                    <input type="password" class="form-control form-control-user" required
+                                        name="password2" id="id_password2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer mt-1">
+                <button type="submit" class="btn btn-success">Crear</button>
+                <a href="" onclick="return cerrar_modal()" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+
+        var url = $('#formulario').attr("action");
+        var token = jQuery("[name=csrfmiddlewaretoken]").val();
+
+        $("form").submit(function (e) {
+            e.preventDefault();
+
+            //toca hacerlo sin el serealizeArray porque no captura la imagen
+            var form = $('#formulario')[0];
+            var formData = new FormData(form);
+
+            $.ajax({
+                url: url,
+                method: "POST",
+                headers: { 'X-CSRFToken': token },
+                processData: false,
+                contentType: false,
+                data: formData,
+            })
+                .done(function (r, textStatus, xhr) {
+                    if (xhr.status = 200) {
+                        cerrar_modal()
+                        setTimeout('document.location.reload()', 1000);
+                        mensaje('Usuario creado satisfactoriamente', 'success');
+                    }
+                    else {
+                        mensaje(textStatus, 'error');
+                    }
+                }).fail(function (error) {
+
+                    var x = document.getElementById("formulario");
+                    for (i = 0; i < x.length; i++) {
+                        x.elements[i].style.borderColor = "green";
+                    }
+
+                    var r = error.responseJSON
+                    for (var clave in r) {
+                        // Controlando que json realmente tenga esa propiedad
+                        if (r.hasOwnProperty(clave)) {
+                            // Mostrando en pantalla la clave junto a su valor
+                            var input = 'id_' + String(clave);
+                            document.getElementById(input).style.borderColor = "red";
+                            mensaje(String(r[clave]), 'error')
+                        }
+                    }
+                })
+        })
+    });
+</script>

@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+{% block title %} Saffiro | Inicio {% endblock title%}
+
+
+{% block title_contend %}
+{% if not request.user.empresa %}
+{% else %}
+Bienvenido
+{% endif %}
+{% endblock title_contend %}
+
+
+{% block contend %}
+
+{% if not Empresas %}
+<div class="row d-flex justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Bienvenido a Saffiro</h3>
+                <p class="card-text">Al parecer no tiene ninguna empresa que gestionar.</p>
+                <a href="" onclick="return abrir_modal('{% url 'empresa_urls:create' %}')" class="btn btn-block btn-lg btn-success "> + Crear una nueva empresa.</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif not request.user.empresa %}
+<div class="row d-flex justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Bienvenido a Saffiro</h3>
+                <p class="card-text">Al parecer no a seleccionado una empresa.</p>
+                <a href="" onclick="return abrir_modal('{% url 'user_urls:change_empresa' %}')" class="btn btn-block btn-lg btn-warning "> + Seleccionar empresa </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+{% endblock contend %}

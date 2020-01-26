@@ -1,0 +1,65 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title_contend %}{% endblock title_contend %}
+{% block contend %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadown card-outline-info">
+            <div class="card-header">
+                <h4 class="m-b-0 text-white">Empresas</h4>
+            </div>
+            <div class="card-body">
+                <h6 class="card-subtitle">Gestione sus empresas de forma ordenada y segura.</h6>
+                <button type="button" class="btn waves-effect waves-light btn-success mb-3"
+                    onclick="return abrir_modal('{% url 'empresa_urls:create' %}')">
+                    + Crear una nueva empresa.
+                </button>
+
+                <div class="table-responsive">
+                    {% if not empresa_list %}
+                    <div class="alert alert-info" role="alert">
+                        No hay empresas para mostrar
+                    </div>
+                    {% else %}
+                    <table class="table table-hover earning-box">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Empresa</th>
+                                <th>F. Creacion</th>
+                                <th>F. Edicion</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for empresa in empresa_list %}
+                            <tr>
+                                <td style="width:50px;">
+                                    <span class="round"><img src="{{empresa.logo.url}}" alt="user" width="50" height="50"></span>
+                                </td>
+                                <td>
+                                    <h6>{{empresa.nombre}}</h6><small class="text-muted">Web Designer</small>
+                                </td>
+                                <td>{{empresa.creacion|date:"d/m/yy"}}</td>
+                                <td>{{empresa.edicion|date:"d/m/yy"}}</td>
+                                <td><button type="button" class="btn waves-effect waves-warning btn-warning"
+                                        onclick="return abrir_modal('{% url 'empresa_urls:update' empresa.id %}')">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    <button type="button" class="btn waves-effect waves-danger btn-danger"
+                                        onclick="return abrir_modal('{% url 'empresa_urls:create' %}')">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock contend %}
