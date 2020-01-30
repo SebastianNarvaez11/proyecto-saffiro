@@ -13,7 +13,10 @@
                     onclick="return abrir_modal('{% url 'user_urls:create' %}')">
                     + Crear un nuevo usuario.
                 </button>
-
+                <button type="button" class="btn waves-effect waves-light btn-danger mb-3 float-right"
+                    onclick="return abrir_modal('{% url 'user_urls:disable-list' %}')">
+                    Usuarios Inactivos.
+                </button>
                 <div class="table-responsive">
                     {% if not user_list %}
                     <div class="alert alert-info" role="alert">
@@ -35,8 +38,9 @@
                             {% for user in user_list %}
                             <tr>
                                 <td style="width:50px;">
-                                    <span class="round"><img {% if user.foto %} src="{{user.foto.url}}" {% else %} src="{% static 'core/assets/images/no-avatar.jpg' %}" {% endif %} alt="user" width="50"
-                                            height="50"></span>
+                                    <span class="round"><img {% if user.foto %} src="{{user.foto.url}}" {% else %}
+                                            src="{% static 'core/assets/images/no-avatar.jpg' %}" {% endif %} alt="user"
+                                            width="50" height="50"></span>
                                 </td>
                                 <td>
                                     <h6>{{user.first_name}} {{user.last_name}}</h6>
@@ -48,11 +52,13 @@
                                 <td>{{user.empresa}}</td>
                                 <td>{{user.email}}</td>
                                 <td>{{user.last_login}}</td>
-                                <td>{{user.is_active|yesno:"Activo,Inactivo"}}</td>
-                                <td><button type="button" class="btn waves-effect waves-warning btn-warning" onclick="return abrir_modal('{% url 'user_urls:update' user.id %}')">
+                                <td><span class="label label-success">Activo</span></td>
+                                <td><button type="button" class="btn waves-effect waves-warning btn-warning"
+                                        onclick="return abrir_modal('{% url 'user_urls:update' user.id %}')">
                                         <i class="fa fa-pencil"></i>
                                     </button>
-                                    <button type="button" class="btn waves-effect waves-danger btn-danger">
+                                    <button type="button" class="btn waves-effect waves-danger btn-danger"
+                                        onclick="return abrir_modal('{% url 'user_urls:disable' user.id %}')">
                                         <i class="fa fa-times"></i>
                                     </button>
                                 </td>

@@ -1,0 +1,59 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="card card-outline-primary">
+            <div class="card-header">
+                <h4 class="m-b-0 text-white mt-2 mb-2">Empresas Inactivas
+                    <i class="fa fa-building-o fa-2x text-white float-right"></i>
+                </h4>
+            </div>
+            <div class="card-body little-profile">
+                <div class="container">
+                    <div class="table-responsive">
+                        {% if not empresa_list %}
+                        <div class="alert alert-info" role="alert">
+                            No hay empresas para mostrar
+                        </div>
+                        {% else %}
+                        <table class="table table-hover earning-box">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Empresa</th>
+                                    <th>F. Creacion</th>
+                                    <th>F. Edicion</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for empresa in empresa_list %}
+                                <tr>
+                                    <td style="width:50px;">
+                                        <span class="round"><img src="{{empresa.logo.url}}" alt="user" width="50"
+                                                height="50"></span>
+                                    </td>
+                                    <td>
+                                        <h6>{{empresa.nombre}}</h6><small class="text-muted">Web Designer</small>
+                                    </td>
+                                    <td>{{empresa.creacion|date:"d/m/yy"}}</td>
+                                    <td>{{empresa.edicion|date:"d/m/yy"}}</td>
+                                    <td><span class="label label-danger">Inactiva</span></td>
+                                    <td>
+                                        <a type="button" href="{% url 'empresa_urls:active' empresa.id %}"
+                                            class="btn waves-effect waves-success btn-outline-info">
+                                            Activar
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="" onclick="return cerrar_modal()" class="btn btn-danger">Cancelar</a>
+        </div>
+    </div>
+</div>

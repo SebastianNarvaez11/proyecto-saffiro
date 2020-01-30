@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.views.generic import CreateView, UpdateView, ListView, DeleteView
 from core.views import Permisos
 from .models import Empresa
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from .forms import EmpresaForm
+from django.contrib import messages
 
 # Create your views here.
 
@@ -12,9 +13,16 @@ class EmpresaListView(Permisos, ListView):
     permission_required = 'empresa.view_empresa'
     model = Empresa
 
+    # filtra el el queryset por empresa activa
     def get_queryset(self):
-        return Empresa.objects.exclude(removed=True)
+        return Empresa.objects.filter(disable=False)
 
+
+class EmpresaListDisableView(EmpresaListView):
+    template_name_suffix = '_list_disable'
+    # filtra el el queryset por empresa inactiva
+    def get_queryset(self):
+        return Empresa.objects.filter(disable=True)
 
 
 
@@ -26,6 +34,7 @@ class EmpresaCreateView(Permisos, CreateView):
     success_message = 'Empresa creada satisfactoriamente'
 
 
+
 class EmpresaUpdateView(Permisos, UpdateView):
     permission_required = 'empresa.change_empresa'
     model = Empresa
@@ -35,15 +44,22 @@ class EmpresaUpdateView(Permisos, UpdateView):
     success_message = 'Empresa actualizada satisfactoriamente'
 
 
-class EmpresaDeleteView(Permisos, UpdateView):
-    permission_required = 'empresa.delete_empresa'
+class EmpresaInactiveView(Permisos, UpdateView):
+    permission_required = 'empresa.change_empresa'
     model = Empresa
-    fields = ['removed']
-    template_name_suffix = '_delete_form'
+    fields = ['disable']
+    template_name_suffix = '_inactive_form'
     success_url = reverse_lazy('empresa_urls:list')
-    success_message = 'Empresa eliminada satisfactoriamente'
+    success_message = 'Empresa inactivada satisfactoriamente'
 
     def form_valid(self, form):
-        form.instance.removed = True
+        form.instance.disable = True
         return super().form_valid(form)
 
+
+def EmpresaActive(request, id):
+    empresa = Empresa.objects.get(id=id)
+    empresa.disable = False
+    empresa.save()
+    messages.add_message(request, messages.SUCCESS, 'Empresa activada satisfactoriamente')
+    return redirect('empresa_urls:list')

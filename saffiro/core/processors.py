@@ -16,4 +16,4 @@ def empresa_ctx(request):
 
 
 def empresas_ctx(request):
-        return {'Empresas':Empresa.objects.all()}
+        return {'Empresas':Empresa.objects.filter(disable=False)}

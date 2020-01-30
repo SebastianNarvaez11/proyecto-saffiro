@@ -14,11 +14,14 @@
     <title>{% block title %}Saffiro{% endblock title %}</title>
     <!-- Bootstrap Core CSS -->
     <link href="{% static 'core/assets/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Bootstrap Table-->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
     <!-- Custom CSS -->
     <link href="{% static 'core/css/style.css' %}" rel="stylesheet">
     <link href="{% static 'core/css/animate.css' %}" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     <link href="{% static 'core/css/colors/blue.css' %}" id="theme" rel="stylesheet">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -116,7 +119,9 @@
                                         </div>
                                     </li>
                                     <li>
-                                        <a class="nav-link text-center" href="{% url 'empresa_urls:list' %}"> <strong>Gestiona tus empresas</strong> <i class="fa fa-angle-right"></i> </a>
+                                        <a class="nav-link text-center" href="{% url 'empresa_urls:list' %}">
+                                            <strong>Gestiona tus empresas</strong> <i class="fa fa-angle-right"></i>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -663,6 +668,11 @@
     <!-- ============================================================== -->
     <script src="{% static 'core/assets/plugins/styleswitcher/jQuery.style.switcher.js' %}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
 
     {% block control_modal %}
     <script>
