@@ -3,7 +3,7 @@ from django.views.generic import CreateView, UpdateView, ListView, DeleteView
 from core.views import Permisos
 from .models import Empresa
 from django.urls import reverse_lazy
-from .forms import EmpresaForm
+from .forms import EmpresaForm, EmpresaInactiveForm
 from django.contrib import messages
 
 # Create your views here.
@@ -21,9 +21,9 @@ class EmpresaListView(Permisos, ListView):
 class EmpresaListDisableView(EmpresaListView):
     template_name_suffix = '_list_disable'
     # filtra el el queryset por empresa inactiva
+
     def get_queryset(self):
         return Empresa.objects.filter(disable=True)
-
 
 
 class EmpresaCreateView(Permisos, CreateView):
@@ -32,7 +32,6 @@ class EmpresaCreateView(Permisos, CreateView):
     form_class = EmpresaForm
     success_url = reverse_lazy('empresa_urls:list')
     success_message = 'Empresa creada satisfactoriamente'
-
 
 
 class EmpresaUpdateView(Permisos, UpdateView):
@@ -47,7 +46,7 @@ class EmpresaUpdateView(Permisos, UpdateView):
 class EmpresaInactiveView(Permisos, UpdateView):
     permission_required = 'empresa.change_empresa'
     model = Empresa
-    fields = ['disable']
+    form_class = EmpresaInactiveForm
     template_name_suffix = '_inactive_form'
     success_url = reverse_lazy('empresa_urls:list')
     success_message = 'Empresa inactivada satisfactoriamente'
@@ -61,5 +60,6 @@ def EmpresaActive(request, id):
     empresa = Empresa.objects.get(id=id)
     empresa.disable = False
     empresa.save()
-    messages.add_message(request, messages.SUCCESS, 'Empresa activada satisfactoriamente')
+    messages.add_message(request, messages.SUCCESS,
+                         'Empresa activada satisfactoriamente')
     return redirect('empresa_urls:list')

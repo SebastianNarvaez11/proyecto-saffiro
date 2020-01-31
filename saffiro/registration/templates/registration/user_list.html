@@ -23,13 +23,15 @@
                         No hay usuarios para mostrar
                     </div>
                     {% else %}
-                    <table class="table table-hover earning-box">
+                    <table data-classes="table table-hover earning-box" data-toggle="table" data-search="true"
+                        id="table" data-show-export="true" data-pagination="true" data-show-fullscreen="true"
+                        data-locale="es-CL">
                         <thead>
                             <tr>
-                                <th colspan="2">Usuario</th>
-                                <th>Empresa</th>
-                                <th>Email</th>
-                                <th>Ultima seccion</th>
+                                <th data-sortable="true" data-field="username">Usuario</th>
+                                <th data-sortable="true" data-field="nombre">Empresa</th>
+                                <th data-sortable="true" data-field="email">Email</th>
+                                <th data-sortable="true" data-field="last_login">Ultima seccion</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
@@ -37,17 +39,16 @@
                         <tbody>
                             {% for user in user_list %}
                             <tr>
-                                <td style="width:50px;">
-                                    <span class="round"><img {% if user.foto %} src="{{user.foto.url}}" {% else %}
+                                <td class="d-flex align-items-center">
+                                    <span class="round mr-3"><img {% if user.foto %} src="{{user.foto.url}}" {% else %}
                                             src="{% static 'core/assets/images/no-avatar.jpg' %}" {% endif %} alt="user"
                                             width="50" height="50"></span>
-                                </td>
-                                <td>
-                                    <h6>{{user.first_name}} {{user.last_name}}</h6>
-                                    <small class="text-muted">
-                                        {% for group in user.groups.all %}{{group}}{% if not forloop.last %},
-                                        {%endif%}{% endfor %}
-                                    </small>
+                                    <h6>{{user.first_name}} {{user.last_name}}<br>
+                                        <small
+                                            class="text-muted">{% for group in user.groups.all %}{{group}}{% if not forloop.last %},
+                                            {%endif%}{% endfor %}
+                                        </small>
+                                    </h6>
                                 </td>
                                 <td>{{user.empresa}}</td>
                                 <td>{{user.email}}</td>

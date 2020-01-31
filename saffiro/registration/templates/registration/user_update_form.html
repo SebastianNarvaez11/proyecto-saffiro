@@ -26,8 +26,10 @@
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                                <div class="float-right pro-img"><img class="img-thumbnail imagen"
-                                        src="{{user.foto.url}}" alt="user" /></div>
+                                <div class="float-right pro-img"><img class="img-thumbnail imagen" {% if user.foto %}
+                                        src="{{user.foto.url}}" {% else %}
+                                        src="{% static 'core/assets/images/no-avatar.jpg' %}" {% endif %} alt="user" />
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -61,18 +63,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-7">
+                            <div class="col-lg-12">
                                 <label for="id_foto">Foto:</label>
                                 <input type="file" name="foto" class="form-control-file " id="id_foto">
-                            </div>
-                            <div class="col-lg-5">
-                                <div class="form-group">
-                                    <div class="demo-checkbox">
-                                        <input type="checkbox" name="is_active" id="id_is_active" class="filled-in"
-                                            {% if user.is_active %} checked {% endif %} />
-                                        <label for="id_is_active">Activo/Inactivo</label>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div class="row mt-2 border-top border-bottom border-success">
