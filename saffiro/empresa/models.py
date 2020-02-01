@@ -1,4 +1,5 @@
 from django.db import models
+import reversion
 
 # Create your models here.
 
@@ -12,7 +13,7 @@ def custom_upload_to_empresa(instance, filename):
         old_instance.logo.delete()
         return 'empresa/' + filename
 
-
+@reversion.register()
 class Empresa(models.Model):
     nombre = models.CharField('Nombre', max_length=20, unique=True)
     logo = models.ImageField('Logo', upload_to=custom_upload_to_empresa)

@@ -26,7 +26,8 @@
                     </div>
                     {% else %}
                     <table data-classes="table table-hover earning-box" data-toggle="table" data-search="true"
-                        id="table" data-show-export="true" data-pagination="true" data-show-fullscreen="true" data-locale="es-CL">
+                        id="table" data-show-export="true" data-pagination="true" data-show-fullscreen="true"
+                        data-locale="es-CL">
                         <thead>
                             <tr>
                                 <th data-sortable="true" data-field="nombre">Empresa</th>
@@ -46,16 +47,22 @@
                                 </td>
                                 <td>{{empresa.creacion|date:"d/m/yy"}}</td>
                                 <td>{{empresa.edicion|date:"d/m/yy"}}</td>
-                                <td><span class="label label-success">Activa</span></td>
+                                <td>{% if empresa == request.user.empresa %}
+                                    <span class="label label-info">Seleccionada</span>
+                                    {% else %}
+                                    <span class="label label-success">Activa</span>
+                                    {% endif %}</td>
                                 <td>
                                     <button type="button" class="btn waves-effect waves-warning btn-warning"
                                         onclick="return abrir_modal('{% url 'empresa_urls:update' empresa.id %}')">
                                         <i class="fa fa-pencil"></i>
                                     </button>
+                                    {% if not  empresa.id == request.user.empresa.id %}
                                     <button type="button" class="btn waves-effect waves-danger btn-danger"
-                                        onclick="return abrir_modal('{% url 'empresa_urls:disable' empresa.id %}')">
+                                        onclick="return abrir_modal('{% url 'empresa_urls:disable-form' empresa.id %}')">
                                         <i class="fa fa-times"></i>
                                     </button>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}

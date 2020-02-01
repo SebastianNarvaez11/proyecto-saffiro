@@ -35,12 +35,9 @@ class UserForm(UserCreationForm):
 
 
 class UserUpdateForm(UserChangeForm):
-    username = forms.CharField(max_length=15, validators=[
-                               MinLengthValidator(5)])
-    first_name = forms.CharField(max_length=20, required=True, validators=[
-                                 validate_only_letters, MinLengthValidator(2)])
-    last_name = forms.CharField(max_length=20, required=True, validators=[
-                                validate_only_letters, MinLengthValidator(2)])
+    username = forms.CharField(max_length=15, validators=[MinLengthValidator(5)])
+    first_name = forms.CharField(max_length=20, required=True, validators=[validate_only_letters, MinLengthValidator(2)])
+    last_name = forms.CharField(max_length=20, required=True, validators=[validate_only_letters, MinLengthValidator(2)])
     email = forms.EmailField(max_length=254, required=True)
 
     class Meta:
@@ -60,6 +57,7 @@ class UserUpdateForm(UserChangeForm):
                     "El email ya existe, prueba con otro")
 
         return email
+    
 
 
 class ChangeEmpresaForm(UserChangeForm):

@@ -6,6 +6,7 @@ empresa_urls = ([
     path('list/', EmpresaListView.as_view(), name='list'),
     path('update/<int:pk>/', EmpresaUpdateView.as_view(), name='update'),
     path('disable-list/', EmpresaListDisableView.as_view(), name='disable-list'),#lista empresas inactivas
-    path('disable/<int:pk>/', EmpresaInactiveView.as_view(), name='disable'),#actualiza el estado a inacativa
+    path('disable-form/<int:pk>/', EmpresaInactiveView.as_view(), name='disable-form'),#muestra el formulario para desactivar
+    path('disable/<int:id>/', EmpresaInactive, name='disable'),#Cambia el estado evaluando que no este seleccionada
     path('active/<int:id>/', EmpresaActive, name='active')#actualiza el estado ah activa
 ], 'empresa_urls')

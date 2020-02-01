@@ -56,6 +56,21 @@ class EmpresaInactiveView(Permisos, UpdateView):
         return super().form_valid(form)
 
 
+def EmpresaInactive(request, id):
+    empresa = Empresa.objects.get(id=id)
+    if empresa.id == request.user.empresa.id:
+        messages.add_message(request, messages.ERROR,
+                             'La empresa no se puede inactivar, debido a que esta actualmente seleccionada')
+        return redirect('empresa_urls:list')
+    else:
+        empresa.disable = True
+        empresa.save()
+        messages.add_message(request, messages.SUCCESS,
+                         'Empresa inactivada satisfactoriamente')
+        return redirect('empresa_urls:list')
+
+
+
 def EmpresaActive(request, id):
     empresa = Empresa.objects.get(id=id)
     empresa.disable = False

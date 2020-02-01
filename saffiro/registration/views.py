@@ -5,6 +5,8 @@ from .models import User
 from .forms import UserForm, ChangeEmpresaForm, UserUpdateForm
 from django.urls import reverse_lazy
 from django.contrib import messages
+import reversion
+
 
 # Create your views here.
 
@@ -12,6 +14,7 @@ from django.contrib import messages
 class UserListView(Permisos, ListView):
     permission_required = 'auth.view_user'
     model = User
+    paginate_by = 4
 
     # no mostrar en la lista, ni el usuario actual, ni los super usuarios
     # solo mostrar los usuarios que estan activos
@@ -44,7 +47,6 @@ class UserCreateView(Permisos, CreateView):
         return super().form_valid(form)
 
 
-
 class UserUpdateView(Permisos, UpdateView):
     permission_required = 'auth.change_user'
     model = User
@@ -53,11 +55,18 @@ class UserUpdateView(Permisos, UpdateView):
     success_url = reverse_lazy('user_urls:list')
     success_message = 'Usuario actualizado satisfactoriamente'
 
-    # funcion le cambia los permisos(grupos) al usuario despues de actualizarlo
+    @reversion.create_revision()
     def form_valid(self, form):
+        # cambia los permisos(grupos) al usuario despues de actualizarlo
         user = form.save()
         grupos = form.cleaned_data.get("groups")
         user.groups.set(grupos)
+
+        # guardar el registro de cambios
+        with reversion.create_revision():
+            reversion.set_user(self.request.user)
+            reversion.set_comment("Usuario '" + user.first_name + " " + user.last_name + "' ah sido modificado")
+
         return super().form_valid(form)
 
 
@@ -72,7 +81,6 @@ class UserInactiveView(Permisos, UpdateView):
     def form_valid(self, form):
         form.instance.is_active = False
         return super().form_valid(form)
-
 
 
 class ChangeEmpresaView(Permisos, UpdateView):
@@ -94,5 +102,6 @@ def UserActive(request, id):
     user = User.objects.get(id=id)
     user.is_active = True
     user.save()
-    messages.add_message(request, messages.SUCCESS, 'Usuario activado satisfactoriamente')
+    messages.add_message(request, messages.SUCCESS,
+                         'Usuario activado satisfactoriamente')
     return redirect('user_urls:list')
