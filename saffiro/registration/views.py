@@ -14,7 +14,6 @@ import reversion
 class UserListView(Permisos, ListView):
     permission_required = 'auth.view_user'
     model = User
-    paginate_by = 4
 
     # no mostrar en la lista, ni el usuario actual, ni los super usuarios
     # solo mostrar los usuarios que estan activos

@@ -1,11 +1,4 @@
 {% load static %}
-<style>
-    .imagen {
-        object-fit: cover;
-        height: 70px;
-    }
-</style>
-
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         <form id="formulario" action="{% url 'user_urls:update' user.id %}" role="form" class="form-control-line"
@@ -26,7 +19,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                                <div class="float-right pro-img"><img class="img-thumbnail imagen" {% if user.foto %}
+                                <div class="float-right pro-img"><img class="img-thumbnail imagen_sidebar" {% if user.foto %}
                                         src="{{user.foto.url}}" {% else %}
                                         src="{% static 'core/assets/images/no-avatar.jpg' %}" {% endif %} alt="user" />
                                 </div>
@@ -68,6 +61,7 @@
                                 <input type="file" name="foto" class="form-control-file " id="id_foto">
                             </div>
                         </div>
+                        {% if not user.is_superuser %}
                         <div class="row mt-2 border-top border-bottom border-success">
                             <div class="col-lg-6 mt-3 mb-3">
                                 <label for="id_groups">Permisos:</label>
@@ -79,6 +73,7 @@
                                     un Mac, para seleccionar más de una opción.</p>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

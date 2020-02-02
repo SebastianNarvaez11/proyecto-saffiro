@@ -1,15 +1,21 @@
 {% extends 'core/base.html' %}
 {% block title_contend %}{% endblock title_contend %}
+{% load static %}
 {% block contend %}
 
 <div class="row">
     <div class="col-12">
-        <div class="card shadown card-outline-info">
+        <div class="card shadown card-outline-warning">
             <div class="card-header">
                 <h4 class="m-b-0 text-white">Historial</h4>
             </div>
             <div class="card-body">
                 <h6 class="card-subtitle">Gestione los cambios que se hacen en sus empresas.</h6>
+                {% if revision_list %}
+                <a type="button" class="btn waves-effect waves-light btn-danger mb-3" href="{% url 'record_delete'%}">
+                    Vaciar Historial.
+                </a>
+                {% endif %}
                 <div class="table-responsive">
                     {% if not revision_list %}
                     <div class="alert alert-info" role="alert">
@@ -22,6 +28,7 @@
                         <thead>
                             <tr>
                                 <th data-sortable="true" data-field="first_name">Autor</th>
+                                <th data-sortable="true" data-field="empresa">Empresa</th>
                                 <th data-sortable="true" data-field="comment">Accion</th>
                                 <th data-sortable="true" data-field="data_crated">Fecha</th>
                             </tr>
@@ -30,12 +37,18 @@
                             {% for revision in revision_list %}
                             <tr>
                                 <td class="d-flex align-items-center">
-                                    <span class="round mr-3"><img src="" alt="user" width="50"
-                                            height="50"></span>
-                                    <h6>{{revision.user}}<br><small class="text-muted">Web Designer</small></h6>
+                                    <span class="round mr-3"><img {% if revision.user.foto %}
+                                            src="{{revision.user.foto.url}}" {% else %}
+                                            src="{% static 'core/assets/images/no-avatar.jpg' %}" {% endif %} alt="user"
+                                            width="50" height="50"></span>
+                                    <h6>{{revision.user.username}}<br>
+                                        <small class="text-muted">{{revision.user.first_name}}
+                                            {{revision.user.last_name}}</small>
+                                    </h6>
                                 </td>
+                                <td>{{revision.user.empresa}}</td>
                                 <td>{{revision.comment}}</td>
-                                <td>{{revision.date_created|date:"d/m/yy"}}</td>
+                                <td>{{revision.date_created}}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

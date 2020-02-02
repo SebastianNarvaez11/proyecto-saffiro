@@ -25,10 +25,10 @@
                     {% else %}
                     <table data-classes="table table-hover earning-box" data-toggle="table" data-search="true"
                         id="table" data-show-export="true" data-pagination="true" data-show-fullscreen="true"
-                        data-locale="es-CL">
+                        data-locale="es-CL" data-page-size="5" data-page-list="[5, 10, 25, all]">
                         <thead>
                             <tr>
-                                <th data-sortable="true" data-field="username">Usuario</th>
+                                <th data-sortable="true" data-field="first_name">Usuario</th>
                                 <th data-sortable="true" data-field="nombre">Empresa</th>
                                 <th data-sortable="true" data-field="email">Email</th>
                                 <th data-sortable="true" data-field="last_login">Ultima seccion</th>
@@ -40,7 +40,7 @@
                             {% for user in user_list %}
                             <tr>
                                 <td class="d-flex align-items-center">
-                                    <span class="round mr-3"><img {% if user.foto %} src="{{user.foto.url}}" {% else %}
+                                    <span class="round mr-3"><img class="imagen_cover"  {% if user.foto %} src="{{user.foto.url}}" {% else %}
                                             src="{% static 'core/assets/images/no-avatar.jpg' %}" {% endif %} alt="user"
                                             width="50" height="50"></span>
                                     <h6>{{user.first_name}} {{user.last_name}}<br>
@@ -67,27 +67,6 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    {% if is_paginated %}
-                    <ul class="pagination justify-content-end">
-                        {% if page_obj.has_previous %}
-                        <li class="page-item" ><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
-                        {% else %}
-                        <li class="page-item disabled"><span class="page-link" >&laquo;</span></li>
-                        {% endif %}
-                        {% for i in paginator.page_range %}
-                        {% if page_obj.number == i %}
-                        <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
-                        {% else %}
-                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-                        {% endif %}
-                        {% endfor %}
-                        {% if page_obj.has_next %}
-                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
-                        {% else %}
-                        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
-                        {% endif %}
-                    </ul>
-                    {% endif %}
                     {% endif %}
                 </div>
             </div>

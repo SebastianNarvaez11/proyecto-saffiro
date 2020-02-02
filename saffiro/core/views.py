@@ -11,9 +11,13 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from reversion.models import Revision
 import reversion
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 # Create your views here.
 
-#formulario invalido con ajax
+# formulario invalido con ajax
+
+
 class MixinFormInvalid:
     def form_invalid(self, form):
         response = super().form_invalid(form)
@@ -27,7 +31,7 @@ class MixinFormInvalid:
 class Permisos(PermissionRequiredMixin, SuccessMessageMixin, MixinFormInvalid):
     raise_exception = False
     redirect_field_name = 'redirect_to'
-    
+
 
 class IndexTemplateView(Permisos, TemplateView):
     permission_required = 'sessions.add_session'
@@ -39,15 +43,26 @@ def ChangeEmpresa(request, id_empresa):
     user = request.user
     user.empresa = empresa
     user.save()
-    return redirect('home')
+    messages.add_message(request, messages.SUCCESS,
+                         'Cambio realizado satisfactoriamente')
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 class RevisionListView(Permisos, ListView):
     permission_required = 'reversion.view_revision'
     model = Revision
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['usuarios'] = User.objects.all()
-        return context
-
     template_name = 'core/reversion_list.html'
+
+    def get_queryset(self):
+        return Revision.objects.exclude(user=None)
+
+
+def RevisionDelete(request):
+    historial = Revision.objects.exclude(user=None)
+    for registro in historial:
+        registro.delete()
+    
+    messages.add_message(request, messages.SUCCESS,
+                         'Limpieza realizada satisfactoriamente')
+    return redirect('record')

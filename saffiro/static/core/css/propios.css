@@ -1,0 +1,8 @@
+.imagen_cover {
+    object-fit: cover;
+}
+
+.imagen_sidebar {
+    object-fit: cover;
+    height: 70px;
+}

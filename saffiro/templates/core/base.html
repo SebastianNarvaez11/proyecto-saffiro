@@ -19,6 +19,7 @@
     <!-- Custom CSS -->
     <link href="{% static 'core/css/style.css' %}" rel="stylesheet">
     <link href="{% static 'core/css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'core/css/propios.css' %}" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     <link href="{% static 'core/css/colors/blue.css' %}" id="theme" rel="stylesheet">
 
@@ -105,8 +106,8 @@
                                         <div class="message-center">
                                             <!-- Message -->
                                             {% for empresa in Empresas %}
-                                            <a href="{% url 'change_empresa' empresa.id%}">
-                                                <span class="round"><img src="{{empresa.logo.url}}" alt="user"
+                                            <a href="{% url 'change_empresa' empresa.id%}?next={{request.path}}">
+                                                <span class="round"><img class="imagen_cover" src="{{empresa.logo.url}}" alt="user"
                                                         width="50" height="50"></span>
                                                 <div class="mail-contnet">
                                                     <h5>{{empresa.nombre}}</h5> <span class="mail-desc">Just see the my
@@ -351,25 +352,29 @@
                                 <input type="text" class="form-control" placeholder="Search & enter"> <a
                                     class="srh-btn"><i class="ti-close"></i></a> </form>
                         </li>
-
+                        
                         <!-- ============================================================== -->
                         <!-- Profile -->
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href=""
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
-                                    src="{% static 'core/assets/images/users/1.jpg' %}" alt="user"
-                                    class="profile-pic" /></a>
+                                    {% if request.user.foto %} src="{{request.user.foto.url}}" {% else %}
+                                    src="{% static 'core/assets/images/no-avatar.jpg' %}" {% endif %} alt="user"
+                                    class="profile-pic imagen_cover"/></a>
                             <div class="dropdown-menu dropdown-menu-right scale-up">
                                 <ul class="dropdown-user">
                                     <li>
                                         <div class="dw-user-box">
-                                            <div class="u-img"><img src="{% static 'core/assets/images/users/1.jpg' %}"
+                                            <div class="u-img"><img {% if request.user.foto %}
+                                                    src="{{request.user.foto.url}}" {% else %}
+                                                    src="{% static 'core/assets/images/no-avatar.jpg' %}" {% endif %}
                                                     alt="user"></div>
                                             <div class="u-text">
-                                                <h4>Steave Jobs</h4>
-                                                <p class="text-muted">varun@gmail.com</p><a href="pages-profile.html"
-                                                    class="btn btn-rounded btn-danger btn-sm">View Profile</a>
+                                                <h4>{{user.get_full_name}}</h4>
+                                                <p class="text-muted">{{user.email}}</p>
+                                                <a onclick="return abrir_modal('{% url 'user_urls:update' request.user.id %}')"
+                                                    class="btn btn-rounded btn-danger btn-sm">Ver Perfil</a>
                                             </div>
                                         </div>
                                     </li>
@@ -405,14 +410,9 @@
                 <div class="user-profile">
                     <!-- User profile image -->
                     <div class="profile-img">
-                        <style>
-                            .imagen {
-                                object-fit: cover;
-                                height: 70px;
-                            }
-                        </style>
+                        
                         {% if request.user.empresa %}
-                        <img src="{{Empresa.logo.url}}" class="imagen" width="70px" alt="user" />
+                        <img src="{{Empresa.logo.url}}" class="imagen_sidebar" width="70px" alt="user" />
                         {% endif %}
                     </div>
                     <!-- User profile text-->
@@ -672,7 +672,8 @@
 
     <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
     <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
+    <script
+        src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
 
     {% block control_modal %}
