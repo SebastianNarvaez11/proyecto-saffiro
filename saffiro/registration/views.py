@@ -37,12 +37,19 @@ class UserCreateView(Permisos, CreateView):
     success_url = reverse_lazy('user_urls:list')
     success_message = 'Usuario creado satisfactoriamente'
 
-    # funcion le agrega los permisos(grupos) al usuario despues de crearlo
+    @reversion.create_revision()
     def form_valid(self, form):
+        # funcion le agrega los permisos(grupos) al usuario despues de crearlo
         user = form.save()
         grupos = form.cleaned_data.get("groups")
         for grupo in grupos:
             user.groups.add(grupo)
+        # guardar el registro de cambios
+        with reversion.create_revision():
+            reversion.set_user(self.request.user)
+            reversion.set_comment(
+                "El usuario '" + user.first_name + " " + user.last_name + "' ah sido creado")
+
         return super().form_valid(form)
 
 
@@ -64,7 +71,12 @@ class UserUpdateView(Permisos, UpdateView):
         # guardar el registro de cambios
         with reversion.create_revision():
             reversion.set_user(self.request.user)
-            reversion.set_comment("Usuario '" + user.first_name + " " + user.last_name + "' ah sido modificado")
+            if form.changed_data:
+                reversion.set_comment(
+                    "El usuario '" + user.first_name + " " + user.last_name + "' ah sido modificado en los campos: " + (", ".join(form.changed_data)))
+            else:
+                reversion.set_comment(
+                    "El usuario '" + user.first_name + " " + user.last_name + "' ah sido actualizado")
 
         return super().form_valid(form)
 

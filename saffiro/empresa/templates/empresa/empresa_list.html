@@ -30,8 +30,8 @@
                         <thead>
                             <tr>
                                 <th data-sortable="true" data-field="nombre">Empresa</th>
+                                <th data-sortable="true" data-field="representante">Representante</th>
                                 <th data-sortable="true" data-field="creacion">F. Creacion</th>
-                                <th data-sortable="true" data-field="edicion">F. Edicion</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
@@ -42,10 +42,10 @@
                                 <td class="d-flex align-items-center">
                                     <span class="round mr-3"><img class="imagen_cover" src="{{empresa.logo.url}}" alt="user" width="50"
                                             height="50"></span>
-                                    <h6>{{empresa.nombre}}<br><small class="text-muted">Web Designer</small></h6>
+                                    <h6>{{empresa.nombre}}<br><small class="text-muted">{{empresa.nit}}</small></h6>
                                 </td>
+                                <td>{{empresa.representante}}</td>
                                 <td>{{empresa.creacion|date:"d/m/yy"}}</td>
-                                <td>{{empresa.edicion|date:"d/m/yy"}}</td>
                                 <td>{% if empresa == request.user.empresa %}
                                     <span class="label label-info">Seleccionada</span>
                                     {% else %}

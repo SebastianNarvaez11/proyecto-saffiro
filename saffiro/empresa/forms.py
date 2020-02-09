@@ -6,7 +6,7 @@ class EmpresaForm(ModelForm):
 
     class Meta:
         model = Empresa
-        fields = ['nombre', 'logo', 'direccion', 'telefono']
+        fields = ['nit','representante', 'cedula', 'nombre', 'logo', 'direccion', 'telefono', 'email']
 
 
 class EmpresaInactiveForm(ModelForm):

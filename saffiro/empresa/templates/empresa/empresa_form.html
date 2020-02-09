@@ -1,4 +1,4 @@
-<div class="modal-dialog">
+<div class="modal-dialog modal-lg">
     <div class="modal-content">
         <form id="formulario" action="{% url 'empresa_urls:create' %}" role="form" class="form-control-line"
             method="POST">
@@ -12,14 +12,21 @@
                 <div class="card-body little-profile">
                     <div class="container">
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="id_nit">Nit:</label>
+                                    <input name="nit" id="id_nit" required type="text" class="form-control"
+                                        value="{% if form.nit.value %}{{form.nit.value}}{%endif%}">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="id_nombre">Nombre:</label>
                                     <input name="nombre" id="id_nombre" required type="text" class="form-control"
                                         value="{% if form.nombre.value %}{{form.nombre.value}}{%endif%}">
                                 </div>
                             </div>
-                            <div class="col-lg-12">
+                            <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="id_direccion">Direccion:</label>
                                     <input name="direccion" id="id_direccion" required type="text"
@@ -27,7 +34,7 @@
                                         value="{% if form.direccion.value %}{{form.direccion.value}}{%endif%}">
                                 </div>
                             </div>
-                            <div class="col-lg-12">
+                            <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="id_telefono">Telefono:</label>
                                     <input name="telefono" id="id_telefono" required type="text"
@@ -35,11 +42,35 @@
                                         value="{% if form.telefono.value %}{{form.telefono.value}}{%endif%}">
                                 </div>
                             </div>
-                            <div class="col-lg-12">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="id_email">Email:</label>
+                                    <input name="email" id="id_email" required type="email"
+                                        class="form-control form-control-line"
+                                        value="{% if form.email.value %}{{form.email.value}}{%endif%}">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="id_logo">Logo:</label>
                                     <input type="file" required name="logo" class="form-control-file" id="id_logo"
                                         value="{% if form.logo.value %}{{form.logo.value}}{%endif%}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2 border-top border-bottom border-success">
+                            <div class="col-lg-6 mt-2">
+                                <div class="form-group">
+                                    <label for="id_representante">Representante Legal:</label>
+                                    <input name="representante" id="id_representante" required type="text" class="form-control"
+                                        value="{% if form.representante.value %}{{form.representante.value}}{%endif%}">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mt-2">
+                                <div class="form-group">
+                                    <label for="id_cedula">Cedula:</label>
+                                    <input name="cedula" id="id_cedula" required type="text" class="form-control"
+                                        value="{% if form.cedula.value %}{{form.cedula.value}}{%endif%}">
                                 </div>
                             </div>
                         </div>
@@ -86,7 +117,7 @@
                         mensaje(textStatus, 'error');
                     }
                 }).fail(function (error) {
-                    
+
                     var x = document.getElementById("formulario");
                     for (i = 0; i < x.length; i++) {
                         x.elements[i].style.borderColor = "green";

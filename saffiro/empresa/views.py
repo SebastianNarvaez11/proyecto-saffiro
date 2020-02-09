@@ -5,9 +5,9 @@ from .models import Empresa
 from django.urls import reverse_lazy
 from .forms import EmpresaForm, EmpresaInactiveForm
 from django.contrib import messages
+import reversion
 
 # Create your views here.
-
 
 class EmpresaListView(Permisos, ListView):
     permission_required = 'empresa.view_empresa'
@@ -33,6 +33,17 @@ class EmpresaCreateView(Permisos, CreateView):
     success_url = reverse_lazy('empresa_urls:list')
     success_message = 'Empresa creada satisfactoriamente'
 
+    @reversion.create_revision()
+    def form_valid(self, form):
+        empresa = form.save()
+        # guardar el registro de cambios
+        with reversion.create_revision():
+            reversion.set_user(self.request.user)
+            reversion.set_comment(
+                "La empresa '" + empresa.nombre + "' ah sido creada")
+
+        return super().form_valid(form)
+
 
 class EmpresaUpdateView(Permisos, UpdateView):
     permission_required = 'empresa.change_empresa'
@@ -41,6 +52,21 @@ class EmpresaUpdateView(Permisos, UpdateView):
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('empresa_urls:list')
     success_message = 'Empresa actualizada satisfactoriamente'
+
+    @reversion.create_revision()
+    def form_valid(self, form):
+        empresa = form.save()
+        # guardar el registro de cambios
+        with reversion.create_revision():
+            reversion.set_user(self.request.user)
+            if form.changed_data:
+                reversion.set_comment(
+                    "La empresa '" + empresa.nombre + "' ah sido modificada en los campos: " + (", ".join(form.changed_data)))
+            else:
+                reversion.set_comment(
+                    "La empresa '" + empresa.nombre + "' ah sido actualizada")
+
+        return super().form_valid(form)
 
 
 class EmpresaInactiveView(Permisos, UpdateView):
@@ -66,9 +92,8 @@ def EmpresaInactive(request, id):
         empresa.disable = True
         empresa.save()
         messages.add_message(request, messages.SUCCESS,
-                         'Empresa inactivada satisfactoriamente')
+                             'Empresa inactivada satisfactoriamente')
         return redirect('empresa_urls:list')
-
 
 
 def EmpresaActive(request, id):

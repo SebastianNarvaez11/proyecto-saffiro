@@ -1,4 +1,5 @@
 from django.db import models
+from core.models import ModeloBase
 from empresa.models import Empresa
 from django.contrib.auth.models import AbstractUser
 import reversion
@@ -18,6 +19,6 @@ def custom_upload_to_user(instance, filename):
         return 'user/' + filename
 
 @reversion.register()
-class User(AbstractUser):
+class User(AbstractUser, ModeloBase):
     empresa = models.ForeignKey(Empresa, verbose_name='Empresa', on_delete=models.SET_NULL, null=True)
     foto = models.ImageField('Foto', upload_to=custom_upload_to_user, null=True, blank=True)
