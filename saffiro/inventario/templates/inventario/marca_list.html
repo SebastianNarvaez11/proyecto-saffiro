@@ -1,0 +1,72 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title_contend %}{% endblock title_contend %}
+{% block contend %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadown card-outline-info">
+            <div class="card-header">
+                <h4 class="m-b-0 text-white">Marcas</h4>
+            </div>
+            <div class="card-body">
+                <h6 class="card-subtitle">Gestione las marcas de sus productos.</h6>
+                <button type="button" class="btn waves-effect waves-light btn-success mb-3"
+                    onclick="return abrir_modal('{% url 'marca_urls:create' %}')">
+                    + Crear una nueva marca.
+                </button>
+                <div class="table-responsive">
+                    {% if not marca_list %}
+                    <div class="alert alert-info" role="alert">
+                        No hay marcas para mostrar
+                    </div>
+                    {% else %}
+                    <table data-classes="table table-hover earning-box" data-toggle="table" data-search="true"
+                        id="table" data-show-export="true" data-pagination="true" data-show-fullscreen="true"
+                        data-locale="es-CL" data-page-size="5" data-page-list="[5, 10, 25, all]">
+                        <thead>
+                            <tr>
+                                <th data-sortable="true" data-field="nombre">Marca</th>
+                                <th data-sortable="true" data-field="estado">Estado</th>
+                                <th data-sortable="true" data-field="creacion">F. Creacion</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for marca in marca_list %}
+                            <tr>
+                                <td>{{marca.nombre}}</td>
+                                <td>{% if marca.estado %}
+                                    <span class="label label-success">Activa</span>
+                                    {% else %}
+                                    <span class="label label-danger">Inactiva</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{marca.creacion|date:"d/m/yy"}}</td>
+                                <td>
+                                    <button type="button" class="btn waves-effect waves-warning btn-warning"
+                                        onclick="return abrir_modal('{% url 'marca_urls:update' marca.id %}')">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    {% if marca.estado %}
+                                    <a type="button" class="btn waves-effect waves-danger btn-danger"
+                                        href="{% url 'marca_urls:change_estado' marca.id%}">
+                                        <i class="fa fa-refresh"></i>
+                                    </a>
+                                    {% else %}
+                                    <a type="button" class="btn waves-effect waves-success btn-success"
+                                        href="{% url 'marca_urls:change_estado' marca.id%}">
+                                        <i class="fa  fa-refresh"></i>
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contend %}

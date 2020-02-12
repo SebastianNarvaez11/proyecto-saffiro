@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'core',
     'empresa',
     'reversion',
+    'inventario',
     'django_userforeignkey',
 ]
 

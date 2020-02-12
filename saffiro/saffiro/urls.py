@@ -18,18 +18,21 @@ from django.conf import settings
 from django.urls import path, include
 from registration.urls import user_urls
 from empresa.urls import empresa_urls
-#from core.urls import 
+from inventario.urls import marca_urls
+# from core.urls import
 
 urlpatterns = [
-    #url home
-    path('',include('core.urls')),
-    #url crud empresas
-    path('empresa/',include(empresa_urls)),
-    #url crud usuarios
-    path('user/',include(user_urls)),
-    #url de autenticacion
-    path('accounts/',include('django.contrib.auth.urls')),
-    #url admin django
+    # url home
+    path('', include('core.urls')),
+    # url crud marca
+    path('marca/', include(marca_urls)),
+    # url crud empresas
+    path('empresa/', include(empresa_urls)),
+    # url crud usuarios
+    path('user/', include(user_urls)),
+    # url de autenticacion
+    path('accounts/', include('django.contrib.auth.urls')),
+    # url admin django
     path('admin/', admin.site.urls),
 ]
 
