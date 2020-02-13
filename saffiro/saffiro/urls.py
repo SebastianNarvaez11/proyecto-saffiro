@@ -18,7 +18,7 @@ from django.conf import settings
 from django.urls import path, include
 from registration.urls import user_urls
 from empresa.urls import empresa_urls
-from inventario.urls import marca_urls
+from inventario.urls import marca_urls, categoria_urls, unidadmedida_urls
 # from core.urls import
 
 urlpatterns = [
@@ -26,6 +26,10 @@ urlpatterns = [
     path('', include('core.urls')),
     # url crud marca
     path('marca/', include(marca_urls)),
+    # url crud categorias
+    path('categoria/', include(categoria_urls)),
+    # url crud unidades de medida
+    path('medida/', include(unidadmedida_urls)),
     # url crud empresas
     path('empresa/', include(empresa_urls)),
     # url crud usuarios

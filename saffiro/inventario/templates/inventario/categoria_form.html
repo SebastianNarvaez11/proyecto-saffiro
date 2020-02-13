@@ -1,18 +1,18 @@
 <div class="modal-dialog">
     <div class="modal-content">
-        {% if marca %}
-        <form id="formulario" action="{% url 'marca_urls:update' marca.id %}" role="form" class="form-control-line"
+        {% if categoria %}
+        <form id="formulario" action="{% url 'categoria_urls:update' categoria.id %}" role="form" class="form-control-line"
             method="POST">
             {% else%}
-            <form id="formulario" action="{% url 'marca_urls:create'%}" role="form" class="form-control-line"
+            <form id="formulario" action="{% url 'categoria_urls:create'%}" role="form" class="form-control-line"
                 method="POST">
                 {% endif %}
 
                 {% csrf_token %}
-                <div class="card {% if marca %} card-outline-warning {% else %} card-outline-success {% endif%} ">
+                <div class="card {% if categoria %} card-outline-warning {% else %} card-outline-success {% endif%} ">
                     <div class="card-header">
-                        <h4 class="m-b-0 text-white mt-2 mb-2">{% if marca %} Actualizar {% else %} Crear {% endif%}
-                            Marca<i class="fa fa-building-o fa-2x text-white float-right"></i>
+                        <h4 class="m-b-0 text-white mt-2 mb-2">{% if categoria %} Actualizar {% else %} Crear {% endif%}
+                            Categoria<i class="fa fa-building-o fa-2x text-white float-right"></i>
                         </h4>
                     </div>
                     <div class="card-body little-profile">
@@ -30,7 +30,7 @@
                                 <div class="form-group">
                                     <div class="demo-checkbox">
                                         <input type="checkbox" name="estado" id="id_estado" class="filled-in"
-                                            {% if marca.estado %} checked {% endif %} />
+                                            {% if categoria.estado %} checked {% endif %} />
                                         <label for="id_estado">Activa/Inactiva</label>
                                     </div>
                                 </div>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">{% if marca %} Actualizar {% else %} Crear
+                    <button type="submit" class="btn btn-success">{% if categoria %} Actualizar {% else %} Crear
                         {% endif%}</button>
                     <a href="" onclick="return cerrar_modal()" class="btn btn-danger">Cancelar</a>
                 </div>
@@ -75,10 +75,10 @@
                         setTimeout('document.location.reload()', 1000);
                         console.log(url)
 
-                        if (url == '/marca/create/') {
-                            mensaje('Marca creada satisfactoriamente', 'success');
+                        if (url == '/categoria/create/') {
+                            mensaje('Categoria creada satisfactoriamente', 'success');
                         } else {
-                            mensaje('Marca actualizada satisfactoriamente', 'success');
+                            mensaje('Categoria actualizada satisfactoriamente', 'success');
                         }
                     }
                     else {
