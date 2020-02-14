@@ -1,0 +1,24 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form id="formulario" action="{% url 'producto_urls:disable-form' producto.id %}" role="form" class="form-control-line"
+            method="POST">
+            {% csrf_token %}
+            <div class="card card-outline-danger">
+                <div class="card-header">
+                    <h4 class="m-b-0 text-white mt-2 mb-2">Inactivar Producto<i
+                            class="fa fa-building-o fa-2x text-white float-right"></i>
+                    </h4>
+                </div>
+                <div class="card-body little-profile">
+                    <div class="container">
+                        <p>Esta seguro de inactivar el producto "{{producto.nombre}}" ? </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger">Si</button>
+                <a href="" onclick="return cerrar_modal()" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>

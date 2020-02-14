@@ -5,6 +5,7 @@ from core.views import Permisos
 from django.urls import reverse_lazy
 import reversion
 from django.contrib import messages
+from .forms import ProductoForm
 
 # Create your views here.
 
@@ -50,7 +51,6 @@ class MarcaUpdateView(Permisos, UpdateView):
         return super().form_valid(form)
 
 
-
 class CategoriaListView(Permisos, ListView):
     permission_required = 'inventario.view_categoria'
     model = Categoria
@@ -92,7 +92,6 @@ class CategoriaUpdateView(Permisos, UpdateView):
         return super().form_valid(form)
 
 
-
 class UnidadMedidaListView(Permisos, ListView):
     permission_required = 'inventario.view_unidadmedida'
     model = UnidadMedida
@@ -132,3 +131,82 @@ class UnidadMedidaUpdateView(Permisos, UpdateView):
                 "La unidad de medida '" + unidadmedida.nombre + "' ah sido modificada")
 
         return super().form_valid(form)
+
+
+#########################################################################################################################################################################
+
+class ProductoListView(Permisos, ListView):
+    permission_required = 'inventario.view_producto'
+    model = Producto
+
+    def get_queryset(self):
+        return Producto.objects.filter(estado=True)
+
+
+class ProductoDisableListView(ProductoListView):
+    template_name_suffix = '_list_disable'
+
+    def get_queryset(self):
+        return Producto.objects.filter(estado=False)
+
+
+class ProductoCreateView(Permisos, CreateView):
+    permission_required = 'inventario.add_producto'
+    model = Producto
+    form_class = ProductoForm
+    success_url = reverse_lazy('producto_urls:list')
+    success_message = 'Producto creado satisfactoriamente'
+
+    @reversion.create_revision()
+    def form_valid(self, form):
+        producto = form.save()
+        with reversion.create_revision():
+            reversion.set_user(self.request.user)
+            reversion.set_comment(
+                "El producto '" + producto.nombre + "' ah sido creado")
+
+        return super().form_valid(form)
+
+
+class ProductoUpdateView(Permisos, UpdateView):
+    permission_required = 'inventario.change_producto'
+    model = Producto
+    form_class = ProductoForm
+    success_url = reverse_lazy('producto_urls:list')
+    success_message = 'Producto actualizado satisfactoriamente'
+
+    @reversion.create_revision()
+    def form_valid(self, form):
+        producto = form.save()
+        with reversion.create_revision():
+            reversion.set_user(self.request.user)
+            if form.changed_data:
+                reversion.set_comment(
+                    "El producto '" + producto.nombre + "' ah sido modificado en los campos: " + (", ".join(form.changed_data)))
+            else:
+                reversion.set_comment(
+                    "El producto '" + producto.nombre + "' ah sido actualizado")
+
+        return super().form_valid(form)
+
+
+class ProductoInactiveView(Permisos, UpdateView):
+    permission_required = 'empresa.change_producto'
+    model = Producto
+    fields = ['estado']
+    template_name_suffix = '_inactive_form'
+    success_url = reverse_lazy('producto_urls:list')
+    success_message = 'Producto inactivado satisfactoriamente'
+
+    def form_valid(self, form):
+        form.instance.estado = False
+        return super().form_valid(form)
+
+
+def ProductoActive(request, id):
+    producto = Producto.objects.get(id=id)
+    producto.estado = True
+    producto.save()
+    messages.add_message(request, messages.SUCCESS,
+                         'Producto activado satisfactoriamente')
+    return redirect('producto_urls:list')

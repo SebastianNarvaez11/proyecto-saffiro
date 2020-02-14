@@ -1,0 +1,172 @@
+{% load static%}
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        {% if producto %}
+        <form id="formulario" action="{% url 'producto_urls:update' producto.id %}" role="form"
+            class="form-control-line" method="POST">
+            {% else%}
+            <form id="formulario" action="{% url 'producto_urls:create'%}" role="form" class="form-control-line"
+                method="POST">
+                {% endif %}
+
+                {% csrf_token %}
+                <div class="card {% if producto %} card-outline-warning {% else %} card-outline-success {% endif%} ">
+                    <div class="card-header">
+                        <h4 class="m-b-0 text-white mt-2 mb-2">{% if producto %} Actualizar {% else %} Crear {% endif%}
+                            Producto<i class="fa fa-building-o fa-2x text-white float-right"></i>
+                        </h4>
+                    </div>
+                    <div class="card-body little-profile">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="id_nombre">Nombre:</label>
+                                        <input name="nombre" id="id_nombre" required type="text" class="form-control"
+                                            value="{% if form.nombre.value %}{{form.nombre.value}}{%endif%}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="id_categoria">Categoria:</label>
+                                        {{form.categoria}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="id_codigo">Codigo:</label>
+                                        <input name="codigo" id="id_codigo" required type="text" class="form-control"
+                                            value="{% if form.codigo.value %}{{form.codigo.value}}{%endif%}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="id_referencia">Referencia:</label>
+                                        <input name="referencia" id="id_referencia" required type="text"
+                                            class="form-control"
+                                            value="{% if form.referencia.value %}{{form.referencia.value}}{%endif%}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="id_descripcion">Descripcion:</label>
+                                        <input name="descripcion" id="id_descripcion" required type="text"
+                                            class="form-control"
+                                            value="{% if form.descripcion.value %}{{form.descripcion.value}}{%endif%}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="id_marca">Marca:</label>
+                                        {{form.marca}}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_unidad_medida">Unidad de medidad:</label>
+                                        {{form.unidad_medida}}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_foto">Foto:</label>
+                                        <input type="file" name="foto" class="form-control-file" id="id_foto"
+                                            value="{% if form.foto.value %}{{form.fotovalue}}{%endif%}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 text-center">
+                                    <div><img id="blah"
+                                            class="img-thumbnail foto_product border {% if producto %} border-warning {% else %} border-success {% endif %}"
+                                            {% if producto %} src=" {{producto.foto.url}}" {% else %}
+                                            src="{% static 'core/assets/images/not-photo.png' %}" {% endif %} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% if producto %} Actualizar {% else %} Crear
+                        {% endif%}</button>
+                    <a href="" onclick="return cerrar_modal()" class="btn btn-danger">Cancelar</a>
+                </div>
+            </form>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+
+        var url = $('#formulario').attr("action");
+        var token = jQuery("[name=csrfmiddlewaretoken]").val();
+
+        $("form").submit(function (e) {
+            e.preventDefault();
+
+            //toca hacerlo sin el serealizeArray porque no captura la imagen
+            var form = $('#formulario')[0];
+            var formData = new FormData(form);
+
+            $.ajax({
+                url: url,
+                method: "POST",
+                headers: { 'X-CSRFToken': token },
+                processData: false,
+                contentType: false,
+                data: formData,
+            })
+                .done(function (r, textStatus, xhr) {
+                    if (xhr.status = 200) {
+                        cerrar_modal()
+                        setTimeout('document.location.reload()', 1000);
+                        console.log(url)
+
+                        if (url == '/producto/create/') {
+                            mensaje('Producto creado satisfactoriamente', 'success');
+                        } else {
+                            mensaje('Producto actualizado satisfactoriamente', 'success');
+                        }
+                    }
+                    else {
+                        mensaje(textStatus, 'error');
+                    }
+                }).fail(function (error) {
+
+                    var x = document.getElementById("formulario");
+                    for (i = 0; i < x.length; i++) {
+                        x.elements[i].style.borderColor = "green";
+                    }
+
+                    var r = error.responseJSON
+                    for (var clave in r) {
+                        // Controlando que json realmente tenga esa propiedad
+                        if (r.hasOwnProperty(clave)) {
+                            // Mostrando en pantalla la clave junto a su valor
+                            var input = 'id_' + String(clave);
+                            document.getElementById(input).style.borderColor = "red";
+                            mensaje(String(r[clave]), 'error')
+                        }
+                    }
+                })
+        })
+    });
+
+
+    function readImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#blah').attr('src', e.target.result); // Renderizamos la imagen
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#id_foto").change(function () {
+        // Código a ejecutar cuando se detecta un cambio de archivO
+        readImage(this);
+    });
+</script>

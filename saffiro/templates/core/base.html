@@ -22,6 +22,7 @@
     <link href="{% static 'core/css/propios.css' %}" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     <link href="{% static 'core/css/colors/blue.css' %}" id="theme" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -107,8 +108,8 @@
                                             <!-- Message -->
                                             {% for empresa in Empresas %}
                                             <a href="{% url 'change_empresa' empresa.id%}?next={{request.path}}">
-                                                <span class="round"><img class="imagen_cover" src="{{empresa.logo.url}}" alt="user"
-                                                        width="50" height="50"></span>
+                                                <span class="round"><img class="imagen_cover" src="{{empresa.logo.url}}"
+                                                        alt="user" width="50" height="50"></span>
                                                 <div class="mail-contnet">
                                                     <h5>{{empresa.nombre}}</h5> <span class="mail-desc">Just see the my
                                                         new
@@ -352,7 +353,7 @@
                                 <input type="text" class="form-control" placeholder="Search & enter"> <a
                                     class="srh-btn"><i class="ti-close"></i></a> </form>
                         </li>
-                        
+
                         <!-- ============================================================== -->
                         <!-- Profile -->
                         <!-- ============================================================== -->
@@ -361,7 +362,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
                                     {% if request.user.foto %} src="{{request.user.foto.url}}" {% else %}
                                     src="{% static 'core/assets/images/no-avatar.jpg' %}" {% endif %} alt="user"
-                                    class="profile-pic imagen_cover"/></a>
+                                    class="profile-pic imagen_cover" /></a>
                             <div class="dropdown-menu dropdown-menu-right scale-up">
                                 <ul class="dropdown-user">
                                     <li>
@@ -410,7 +411,7 @@
                 <div class="user-profile">
                     <!-- User profile image -->
                     <div class="profile-img">
-                        
+
                         {% if request.user.empresa %}
                         <img src="{{Empresa.logo.url}}" class="imagen_sidebar" width="70px" alt="user" />
                         {% endif %}
@@ -465,9 +466,9 @@
                                 <li><a href="{% url 'marca_urls:list' %}">Marcas</a></li>
                                 <li><a href="{% url 'categoria_urls:list' %}">Categorias</a></li>
                                 <li><a href="{% url 'unidadmedida_urls:list' %}">Unidades de Medida</a></li>
-                                <li><a href="app-calendar.html">Productos</a></li>
+                                <li><a href="{% url 'producto_urls:list' %}">Productos</a></li>
                             </ul>
-                        </li>    
+                        </li>
                         <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
                                     class="mdi mdi-email"></i><span class="hide-menu">Inventario</span></a>
                             <ul aria-expanded="false" class="collapse">
@@ -673,6 +674,7 @@
     <script
         src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
     {% block control_modal %}
     <script>

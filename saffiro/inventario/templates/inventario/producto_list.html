@@ -1,0 +1,77 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title_contend %}{% endblock title_contend %}
+{% block contend %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadown card-outline-info">
+            <div class="card-header">
+                <h4 class="m-b-0 text-white">Productos</h4>
+            </div>
+            <div class="card-body">
+                <h6 class="card-subtitle">Gestione los productos que desea tener en su inventario.</h6>
+                <button type="button" class="btn waves-effect waves-light btn-success mb-3"
+                    onclick="return abrir_modal('{% url 'producto_urls:create' %}')">
+                    + Crear un nuevo producto.
+                </button>
+                <button type="button" class="btn waves-effect waves-light btn-danger mb-3 float-right"
+                    onclick="return abrir_modal('{% url 'producto_urls:disable-list' %}')">
+                    Productos Inactivos.
+                </button>
+                <div class="table-responsive">
+                    {% if not producto_list %}
+                    <div class="alert alert-info" role="alert">
+                        No hay productos para mostrar
+                    </div>
+                    {% else %}
+                    <table data-classes="table table-hover earning-box product-overview" data-toggle="table"
+                        data-search="true" id="table" data-show-export="true" data-pagination="true"
+                        data-show-fullscreen="true" data-locale="es-CL" data-page-size="15"
+                        data-page-list="[15, 20, 25, all]">
+                        <thead>
+                            <tr>
+                                <th data-sortable="true" data-field="nombre">Producto</th>
+                                <th>Foto</th>
+                                <th data-sortable="true" data-field="codigo">Codigo</th>
+                                <th data-sortable="true" data-field="categoria">Categoria</th>
+                                <th data-sortable="true" data-field="marca">Marca</th>
+                                <th data-sortable="true" data-field="unidad_medida">U. Medidad</th>
+                                <th data-sortable="true" data-field="estado">Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for producto in producto_list %}
+                            <tr>
+                                <td>{{producto.nombre}}</td>
+                                <td>{% if producto.foto %}
+                                    <img class="foto_list_product" src="{{producto.foto.url}}" alt="user" width="50"
+                                        height="50"> {% endif %} </td>
+                                <td>{{producto.codigo}}</td>
+                                <td>{{producto.categoria}}</td>
+                                <td>{{producto.marca}}</td>
+                                <td>{{producto.unidad_medida}}</td>
+                                <td>
+                                    <span class="label label-success">Activo</span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn waves-effect waves-warning btn-warning"
+                                        onclick="return abrir_modal('{% url 'producto_urls:update' producto.id %}')">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    <button type="button" class="btn waves-effect waves-danger btn-danger"
+                                        onclick="return abrir_modal('{% url 'producto_urls:disable-form' producto.id %}')">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contend %}

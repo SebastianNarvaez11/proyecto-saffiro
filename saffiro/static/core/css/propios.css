@@ -6,3 +6,14 @@
     object-fit: cover;
     height: 70px;
 }
+
+.foto_list_product{
+    object-fit: cover;
+    height: 70px;
+    width: 70px;
+}
+
+.foto_product{
+    object-fit: cover;
+    height: 250px;
+}

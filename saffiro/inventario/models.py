@@ -15,6 +15,9 @@ class Inventario(ModeloBase):
     class Meta:
         verbose_name = 'Inventario'
         verbose_name_plural = 'Inventarios'
+    
+    def __str__(self):
+        return self.empresa
 
 
 @receiver(post_save, sender=Empresa)
@@ -31,6 +34,9 @@ class Marca(ModeloBase):
         verbose_name = 'Marca'
         verbose_name_plural = 'Marcas'
         ordering = ['-creacion']
+    
+    def __str__(self):
+        return self.nombre
 
 
 @reversion.register()
@@ -41,6 +47,9 @@ class Categoria(ModeloBase):
         verbose_name = 'Categoria'
         verbose_name_plural = 'Categorias'
         ordering = ['-creacion']
+    
+    def __str__(self):
+        return self.nombre
 
 
 @reversion.register()
@@ -51,6 +60,9 @@ class UnidadMedida(ModeloBase):
         verbose_name = 'Unidad de Medidad'
         verbose_name_plural = 'Unidades de Medidad'
         ordering = ['-creacion']
+
+    def __str__(self):
+        return self.nombre
 
 
 
@@ -70,12 +82,15 @@ class Producto(ModeloBase):
     codigo = models.CharField('Codigo', max_length=10, unique=True)
     referencia = models.CharField('Referencia', max_length=20, unique=True)
     descripcion = models.CharField('Descripcion', max_length=100, blank=True, null=True)
-    categorias = models.ForeignKey(Categoria, verbose_name='Categoria', on_delete=models.CASCADE)
+    categoria = models.ForeignKey(Categoria, verbose_name='Categoria', on_delete=models.CASCADE)
     marca = models.ForeignKey(Marca, verbose_name='Marca', on_delete=models.CASCADE)
     unidad_medida = models.ForeignKey(UnidadMedida, verbose_name='Unidad de medida', on_delete=models.CASCADE)
-    foto = models.ImageField('Foto', upload_to=custom_upload_to_producto)
+    foto = models.ImageField('Foto', upload_to=custom_upload_to_producto, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Producto'
         verbose_name_plural = 'Productos'
         ordering = ['-creacion']
+    
+    def __str__(self):
+        return self.nombre

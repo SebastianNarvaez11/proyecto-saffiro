@@ -18,3 +18,13 @@ unidadmedida_urls = ([
     path('create/', UnidadMedidaCreateView.as_view(), name='create'),
     path('update/<int:pk>/', UnidadMedidaUpdateView.as_view(), name='update'),
 ], 'unidadmedida_urls')
+
+producto_urls = ([
+    path('list/', ProductoListView.as_view(), name='list'),
+    path('create/', ProductoCreateView.as_view(), name='create'),
+    path('update/<int:pk>/', ProductoUpdateView.as_view(), name='update'),
+    path('disable-list/', ProductoDisableListView.as_view(), name='disable-list'),
+    path('disable-form/<int:pk>/', ProductoInactiveView.as_view(), name='disable-form'),#muestra el formulario para desactivar
+    path('active/<int:id>/', ProductoActive, name='active')#actualiza el estado ah activo
+], 'producto_urls')
+
