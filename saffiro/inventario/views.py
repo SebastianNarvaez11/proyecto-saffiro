@@ -157,6 +157,13 @@ class ProductoCreateView(Permisos, CreateView):
     success_url = reverse_lazy('producto_urls:list')
     success_message = 'Producto creado satisfactoriamente'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categorias'] = Categoria.objects.filter(estado=True)
+        context['marcas'] = Marca.objects.filter(estado=True)
+        context['unidad_medidas'] = UnidadMedida.objects.filter(estado=True)
+        return context
+
     @reversion.create_revision()
     def form_valid(self, form):
         producto = form.save()
@@ -174,6 +181,13 @@ class ProductoUpdateView(Permisos, UpdateView):
     form_class = ProductoForm
     success_url = reverse_lazy('producto_urls:list')
     success_message = 'Producto actualizado satisfactoriamente'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categorias'] = Categoria.objects.filter(estado=True)
+        context['marcas'] = Marca.objects.filter(estado=True)
+        context['unidad_medidas'] = UnidadMedida.objects.filter(estado=True)
+        return context
 
     @reversion.create_revision()
     def form_valid(self, form):

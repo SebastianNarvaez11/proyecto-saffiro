@@ -1,0 +1,63 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title_contend %}{% endblock title_contend %}
+{% block contend %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadown card-outline-info">
+            <div class="card-header">
+                <h4 class="m-b-0 text-white">Compras</h4>
+            </div>
+            <div class="card-body">
+                <h6 class="card-subtitle">Gestione sus compras de forma ordenada y segura.</h6>
+                <button type="button" class="btn waves-effect waves-light btn-success mb-3">
+                    + Realizar una nueva compra.
+                </button>
+                <div class="table-responsive">
+                    {% if not compra_list %}
+                    <div class="alert alert-info" role="alert">
+                        No hay compras para mostrar
+                    </div>
+                    {% else %}
+                    <table data-classes="table table-hover earning-box" data-toggle="table" data-search="true"
+                        id="table" data-show-export="true" data-pagination="true" data-show-fullscreen="true"
+                        data-locale="es-CL" data-page-size="5" data-page-list="[5, 10, 25, all]">
+                        <thead>
+                            <tr>
+                                <th data-sortable="true" data-field="codigo">Codigo</th>
+                                <th data-sortable="true" data-field="creacion">F. Compra</th>
+                                <th data-sortable="true" data-field="nombre">Proveedor</th>
+                                <th data-sortable="true" data-field="nombre">Productos</th>
+                                <th data-sortable="true" data-field="total">Total</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for compra in compra_list %}
+                            <tr>
+                                <td>{{compra.codigo}}</td>
+                                <td>{{compra.creacion}}</td>
+                                <td>{{compra.proveedor}}</td>
+                                <th>{% for detalle in compra.detallecompra_set.all %}{{det.producto}}{% if not forloop.last %},
+                                    {%endif%}{% endfor %}</th>
+                                <td>{{compra.total}}</td>
+                                <td>
+                                    <button type="button" class="btn waves-effect waves-warning btn-warning">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    <button type="button" class="btn waves-effect waves-danger btn-danger">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock contend %}
