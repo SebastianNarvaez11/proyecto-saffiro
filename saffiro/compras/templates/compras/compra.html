@@ -1,0 +1,137 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title_contend %}{% endblock title_contend %}
+{% block contend %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadown card-outline-info">
+            <div class="card-header">
+                <h4 class="m-b-0 text-white">Nueva Compra</h4>
+            </div>
+            <form id="formulario" role="form" class="form-control-line" method="POST">
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="container-fluid">
+                        
+                        <class class="row">
+                            <div class="col-6">
+                                <p class="pb-5">Fecha de la compra : {% now "SHORT_DATETIME_FORMAT" %}</p>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="id_codigo">Compra Numero:</label>
+                                            <input name="codigo" id="id_codigo" required type="number"
+                                                class="form-control"
+                                                value="{% if form.codigo.value %}{{form.codigo.value}}{%endif%}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="id_proveedor">Proveedor:</label>
+                                            <select name="proveedor" id="id_proveedor"
+                                                class="form-control custom-select">
+                                                {% if compra %}
+                                                <option value="{{ compra.proveedor.id }}">{{compra.proveedor}}</option>
+                                                {% else %}
+                                                <option value="0">Seleccione un proveedor</option>
+                                                {% endif %}
+                                                {% for proveedor in proveedores %}
+                                                <option value="{{proveedor.id}}">{{proveedor.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="id_observaciones">Observaciones :</label>
+                                    <input name="observaciones" id="id_observaciones" type="text" class="form-control"
+                                        required
+                                        value="{% if form.observaciones.value %}{{form.observaciones.value}}{%endif%}">
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label for="id_sub_total">Sub Total:</label>
+                                            <input name="sub_total" id="id_sub_total" type="number" class="form-control"
+                                                value="{% if form.sub_total.value %}{{form.sub_total.value}}{%endif%}">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label for="id_descuento">Descuento:</label>
+                                            <input name="descuento" id="id_descuento" type="number" class="form-control"
+                                                value="{% if form.descuento.value %}{{form.descuento.value}}{%endif%}">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label for="id_total">Total:</label>
+                                            <input name="total" id="id_total" type="number" class="form-control"
+                                                value="{% if form.total.value %}{{form.total.value}}{%endif%}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="table-responsive">
+                                    {% if not productos %}
+                                    <div class="alert alert-info" role="alert">
+                                        No hay productos para mostrar
+                                    </div>
+                                    {% else %}
+                                    <table data-classes="table table-hover earning-box" data-toggle="table"
+                                        data-search="true" id="table" data-pagination="true" data-show-fullscreen="true"
+                                        data-locale="es-CL" data-page-size="2" data-page-list="[2,5,10, 20, 25, all]">
+                                        <thead>
+                                            <tr>
+                                                <th data-sortable="true" data-field="nombre">Producto</th>
+                                                <th data-sortable="true" data-field="categoria">Categoria</th>
+                                                <th data-sortable="true" data-field="marca">Marca</th>
+                                                <th data-sortable="true" data-field="unidad_medida">U. Medidad</th>
+                                                <th>Accion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for producto in productos %}
+                                            <tr>
+                                                <td>{{producto.nombre}}</td>
+                                                <td>{{producto.categoria}}</td>
+                                                <td>{{producto.marca}}</td>
+                                                <td>{{producto.unidad_medida}}</td>
+                                                <td>
+                                                    <button type="button"
+                                                        class="btn waves-effect waves-warning btn-warning">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </class>
+
+
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Comprar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock contend %}
+
+{% block js %}
+<script>
+    $(function () {
+        $("#id_proveedor").select2();
+    });
+
+</script>
+{% endblock js %}

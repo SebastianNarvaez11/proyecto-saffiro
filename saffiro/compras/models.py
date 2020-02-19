@@ -12,7 +12,7 @@ class Proveedor(ModeloBase):
     nombre = models.CharField('Nombre', max_length=100, unique=True)
     direccion = models.CharField('Direccion', max_length=250, null=True, blank=True)
     contacto = models.CharField('Contacto', max_length=100)
-    telefono = models.CharField('Telefono', max_length=10)
+    telefono = models.CharField('Telefono', max_length=15)
     email = models.CharField('Email', max_length=250, null=True, blank=True)
 
     class Meta:

@@ -6,17 +6,18 @@
     <div class="col-12">
         <div class="card shadown card-outline-info">
             <div class="card-header">
-                <h4 class="m-b-0 text-white">Compras</h4>
+                <h4 class="m-b-0 text-white">Proveedores</h4>
             </div>
             <div class="card-body">
-                <h6 class="card-subtitle">Gestione sus compras de forma ordenada y segura.</h6>
-                <a type="button" class="btn waves-effect waves-light btn-success mb-3" href="{% url 'compra_urls:create' %}">
-                    + Realizar una nueva compra.
-                </a>
+                <h6 class="card-subtitle">Gestione sus proveedores de forma ordenada y segura.</h6>
+                <button type="button" class="btn waves-effect waves-light btn-success mb-3"
+                onclick="return abrir_modal('{% url 'proveedor_urls:create' %}')">
+                    + Crear un nuevo proveedor.
+                </button>
                 <div class="table-responsive">
-                    {% if not compra_list %}
+                    {% if not proveedor_list %}
                     <div class="alert alert-info" role="alert">
-                        No hay compras para mostrar
+                        No hay proveedores para mostrar
                     </div>
                     {% else %}
                     <table data-classes="table table-hover earning-box" data-toggle="table" data-search="true"
@@ -24,25 +25,25 @@
                         data-locale="es-CL" data-page-size="5" data-page-list="[5, 10, 25, all]">
                         <thead>
                             <tr>
-                                <th data-sortable="true" data-field="codigo">Codigo</th>
-                                <th data-sortable="true" data-field="creacion">F. Compra</th>
                                 <th data-sortable="true" data-field="nombre">Proveedor</th>
-                                <th data-sortable="true" data-field="nombre">Productos</th>
-                                <th data-sortable="true" data-field="total">Total</th>
+                                <th data-sortable="true" data-field="telefono">Telefono</th>
+                                <th data-sortable="true" data-field="direccion">Direccion</th>
+                                <th data-sortable="true" data-field="contacto">Contacto</th>
+                                <th data-sortable="true" data-field="email">Email</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for compra in compra_list %}
+                            {% for proveedor in proveedor_list %}
                             <tr>
-                                <td>{{compra.codigo}}</td>
-                                <td>{{compra.creacion}}</td>
-                                <td>{{compra.proveedor}}</td>
-                                <th>{% for detalle in compra.detallecompra_set.all %}{{det.producto}}{% if not forloop.last %},
-                                    {%endif%}{% endfor %}</th>
-                                <td>{{compra.total}}</td>
+                                <td>{{proveedor.nombre}}</td>
+                                <td>{{proveedor.telefono}}</td>
+                                <td>{{proveedor.direccion}}</td>
+                                <td>{{proveedor.contacto}}</td>
+                                <td>{{proveedor.email}}</td>
                                 <td>
-                                    <button type="button" class="btn waves-effect waves-warning btn-warning">
+                                    <button type="button" class="btn waves-effect waves-warning btn-warning"
+                                        onclick="return abrir_modal('{% url 'proveedor_urls:update' proveedor.id %}')">
                                         <i class="fa fa-pencil"></i>
                                     </button>
                                     <button type="button" class="btn waves-effect waves-danger btn-danger">

@@ -19,7 +19,7 @@ from django.urls import path, include
 from registration.urls import user_urls
 from empresa.urls import empresa_urls
 from inventario.urls import marca_urls, categoria_urls, unidadmedida_urls, producto_urls
-from compras.urls import compra_urls
+from compras.urls import compra_urls, proveedor_urls
 # from core.urls import
 
 urlpatterns = [
@@ -35,6 +35,8 @@ urlpatterns = [
     path('empresa/', include(empresa_urls)),
     # url crud compras
     path('compras/', include(compra_urls)),
+    # url crud proveedor
+    path('proveedor/', include(proveedor_urls)),
     # url crud producto
     path('producto/', include(producto_urls)),
     # url crud usuarios
