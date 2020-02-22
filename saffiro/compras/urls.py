@@ -9,5 +9,6 @@ proveedor_urls = ([
 
 compra_urls = ([
     path('list/', ComprasListView.as_view(), name='list'),
-    path('create/', Compra, name='create')
+    path('create/', Compra, name='create'),
+    path('product/', CompraProductosList.as_view(), name= 'productos_list')
 ], 'compra_urls')

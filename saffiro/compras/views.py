@@ -58,14 +58,27 @@ class ProveedorUpdateView(Permisos, UpdateView):
         return super().form_valid(form)
 
 
-
 class ComprasListView(Permisos, ListView):
     permission_required = 'compras.view_compra'
     model = Compra
 
 
+class CompraProductosList(Permisos, ListView):
+    permission_required = 'compras.view_compra'
+    template_name = 'compras/productos.html'
+    model = Producto
+
+
 def Compra(request):
     productos = Producto.objects.filter(estado=True)
     proveedores = Proveedor.objects.filter(estado=True)
-    form = CompraForm
-    return render(request, 'compras/compra.html', {'form': form, 'proveedores':proveedores, 'productos':productos})
+    form = {}
+    empresa = request.user.empresa
+    codigo = 0
+    compras = empresa.compra_set.all()
+    if compras:
+        codigo = compras.length + 1
+    else:
+        codigo = 1
+
+    return render(request, 'compras/compra.html', {'form': form, 'proveedores': proveedores, 'productos': productos, 'codigo': codigo})

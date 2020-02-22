@@ -1,0 +1,60 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="card card-outline-primary">
+            <div class="card-header">
+                <h4 class="m-b-0 text-white mt-2 mb-2">Seleccione un Producto
+                    <i class="fa fa-building-o fa-2x text-white float-right"></i>
+                </h4>
+            </div>
+            <div class="card-body little-profile">
+                <div class="container">
+                    <div class="table-responsive">
+                        {% if not producto_list %}
+                        <div class="alert alert-info" role="alert">
+                            No hay productos para mostrar
+                        </div>
+                        {% else %}
+                        <table data-classes="table table-hover earning-box" data-toggle="table" data-search="true"
+                            id="tblProducto" data-pagination="true" data-show-fullscreen="true" data-locale="es-CL"
+                            data-page-size="7" data-page-list="[10, 20, 25, all]">
+                            <thead>
+                                <tr>
+                                    <th data-sortable="true" data-field="nombre">Producto</th>
+                                    <th data-sortable="true" data-field="categoria">Categoria</th>
+                                    <th data-sortable="true" data-field="marca">Marca</th>
+                                    <th data-sortable="true" data-field="unidad_medida">U. Medidad</th>
+                                    <th>Accion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for producto in producto_list %}
+                                <tr>
+                                    <td>{{producto.nombre}}</td>
+                                    <td>{{producto.categoria}}</td>
+                                    <td>{{producto.marca}}</td>
+                                    <td>{{producto.unidad_medida}}</td>
+                                    <td>
+                                        <button type="button" class="btn waves-effect waves-warning btn-warning">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="" onclick="return cerrar_modal()" class="btn btn-danger">Cancelar</a>
+        </div>
+    </div>
+</div>
+
+{% block js %}
+<script>
+    $('#tblProducto').bootstrapTable();
+</script>
+{% endblock js %}

@@ -1,31 +1,27 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% block title_contend %}{% endblock title_contend %}
+{% block title_contend %}Nueva Compra{% endblock title_contend %}
 {% block contend %}
 <div class="row">
     <div class="col-12">
         <div class="card shadown card-outline-info">
-            <div class="card-header">
-                <h4 class="m-b-0 text-white">Nueva Compra</h4>
-            </div>
             <form id="formulario" role="form" class="form-control-line" method="POST">
                 {% csrf_token %}
                 <div class="card-body">
                     <div class="container-fluid">
-                        
-                        <class class="row">
+                        <div class="row ">
                             <div class="col-6">
-                                <p class="pb-5">Fecha de la compra : {% now "SHORT_DATETIME_FORMAT" %}</p>
+                                <p class="pb-2">Fecha de la compra : {% now "SHORT_DATETIME_FORMAT" %}</p>
                                 <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <div class="form-group">
                                             <label for="id_codigo">Compra Numero:</label>
-                                            <input name="codigo" id="id_codigo" required type="number"
+                                            <input name="codigo" id="id_codigo" required type="text"
                                                 class="form-control"
-                                                value="{% if form.codigo.value %}{{form.codigo.value}}{%endif%}">
+                                                value="{% if form.codigo.value %}{{form.codigo.value}}{%else%}{{codigo}}{%endif%}">
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <div class="form-group">
                                             <label for="id_proveedor">Proveedor:</label>
                                             <select name="proveedor" id="id_proveedor"
@@ -42,84 +38,154 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label for="id_observaciones">Observaciones :</label>
-                                    <input name="observaciones" id="id_observaciones" type="text" class="form-control"
-                                        required
-                                        value="{% if form.observaciones.value %}{{form.observaciones.value}}{%endif%}">
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-4">
-                                        <div class="form-group">
-                                            <label for="id_sub_total">Sub Total:</label>
-                                            <input name="sub_total" id="id_sub_total" type="number" class="form-control"
-                                                value="{% if form.sub_total.value %}{{form.sub_total.value}}{%endif%}">
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="form-group">
-                                            <label for="id_descuento">Descuento:</label>
-                                            <input name="descuento" id="id_descuento" type="number" class="form-control"
-                                                value="{% if form.descuento.value %}{{form.descuento.value}}{%endif%}">
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="form-group">
-                                            <label for="id_total">Total:</label>
-                                            <input name="total" id="id_total" type="number" class="form-control"
-                                                value="{% if form.total.value %}{{form.total.value}}{%endif%}">
-                                        </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="id_observaciones">Observaciones :</label>
+                                        <input class="form-control" name="observaciones" id="id_observaciones"
+                                            type="text"
+                                            value="{% if form.observaciones.value %}{{form.observaciones.value}}{%endif%}">
                                     </div>
                                 </div>
 
                             </div>
                             <div class="col-lg-6">
-                                <div class="table-responsive">
-                                    {% if not productos %}
-                                    <div class="alert alert-info" role="alert">
-                                        No hay productos para mostrar
+                                <p class="pb-1">Seleccione un producto:</p>
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <label for="id_codigo_producto">Codigo:</label>
+                                        <div class="form-group">
+                                            <input name="codigo_producto" id="id_codigo_producto" required type="text"
+                                                class="form-control">
+                                        </div>
                                     </div>
-                                    {% else %}
-                                    <table data-classes="table table-hover earning-box" data-toggle="table"
-                                        data-search="true" id="table" data-pagination="true" data-show-fullscreen="true"
-                                        data-locale="es-CL" data-page-size="2" data-page-list="[2,5,10, 20, 25, all]">
-                                        <thead>
-                                            <tr>
-                                                <th data-sortable="true" data-field="nombre">Producto</th>
-                                                <th data-sortable="true" data-field="categoria">Categoria</th>
-                                                <th data-sortable="true" data-field="marca">Marca</th>
-                                                <th data-sortable="true" data-field="unidad_medida">U. Medidad</th>
-                                                <th>Accion</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for producto in productos %}
-                                            <tr>
-                                                <td>{{producto.nombre}}</td>
-                                                <td>{{producto.categoria}}</td>
-                                                <td>{{producto.marca}}</td>
-                                                <td>{{producto.unidad_medida}}</td>
-                                                <td>
-                                                    <button type="button"
-                                                        class="btn waves-effect waves-warning btn-warning">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                    {% endif %}
+                                    <div class="col-lg-7">
+                                        <label for="id_nombre_producto">Nombre:</label>
+                                        <div class="form-group">
+                                            <input name="nombre_producto" id="id_nombre_producto" readonly type="text"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label for="id_buscar">Buscar</label>
+                                        <button id="id_buscar" type="button"
+                                            class="btn waves-effect waves-primary btn-primary btn-block"
+                                            onclick="return abrir_modal('{% url 'compra_urls:productos_list' %}')">
+                                            <i class="fa  fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <label for="id_cantidad">Cantidad:</label>
+                                        <div class="form-group">
+                                            <input name="cantidad" id="id_cantidad" required type="number"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="id_precio_compra">Precio:</label>
+                                        <div class="form-group">
+                                            <input name="precio_compra" id="id_precio_compra" required type="number"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="id_descuento_detalle">Descuento:</label>
+                                            <input name="descuento_detalle" id="id_descuento_detalle" required
+                                                type="number" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <label for="id_sub_total_det">Sub total:</label>
+                                        <div class="form-group">
+                                            <input name="sub_total_det" id="id_sub_total_det" readonly type="text"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="id_total_det">Total:</label>
+                                        <div class="form-group">
+                                            <input name="total_det" id="id_total_det" readonly type="text"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 d-flex align-items-center">
+                                        <button type="submit" class="btn btn-success btn-block " id="btnAñadir">
+                                            Añadir <i class="fa fa-shopping-cart"></i> </button>
+                                    </div>
                                 </div>
                             </div>
-                        </class>
+                        </div>
+                        <div class="row">
+                            <div class="table-responsive">
+                                <table
+                                    data-classes="table table-hover earning-box color-bordered-table primary-bordered-table"
+                                    data-toggle="table" id="table" data-pagination="true" data-locale="es-CL"
+                                    data-page-size="5" data-page-list="[5, 10, 25, all]">
+                                    <thead>
+                                        <tr>
+                                            <th data-sortable="true" data-field="producto">Producto</th>
+                                            <th data-sortable="true" data-field="cantidad">Cantidad</th>
+                                            <th data-sortable="true" data-field="precio_compra">Precio</th>
+                                            <th data-sortable="true" data-field="descuento">Descuento</th>
+                                            <th data-sortable="true" data-field="sub_total">Sub total</th>
+                                            <th data-sortable="true" data-field="total">Total</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for detalle in detallecompra_list %}
+                                        <tr>
+                                            <td>{{detalle.producto}}</td>
+                                            <td>{{detalle.cantidad}}</td>
+                                            <td>{{detalle.precio_compra}}</td>
+                                            <td>{{detalle.descuento}}</td>
+                                            <td>{{detalle.sub_total}}</td>
+                                            <td>{{detalle.total}}</td>
+                                            <td>
+                                                <button type="button" class="btn waves-effect waves-danger btn-danger">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
 
-
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="id_sub_total">Sub Total:</label>
+                                    <input name="sub_total" id="id_sub_total" type="text" class="form-control" readonly
+                                        value="{% if form.sub_total.value %}{{form.sub_total.value}}{%endif%}">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="id_descuento">Descuento:</label>
+                                    <input name="descuento" id="id_descuento" type="number" class="form-control"
+                                        value="{% if form.descuento.value %}{{form.descuento.value}}{%endif%}">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="id_total">Total:</label>
+                                    <input name="total" id="id_total" type="text" class="form-control" readonly
+                                        value="{% if form.total.value %}{{form.total.value}}{%endif%}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success mr-2">Comprar</button>
+                            <button type="submit" class="btn btn-danger">Cancelar</button>
+                        </div>
                     </div>
-                </div>
-                <button type="submit" class="btn btn-success">Comprar</button>
+                    
             </form>
         </div>
     </div>

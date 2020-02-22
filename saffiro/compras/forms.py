@@ -16,3 +16,5 @@ class CompraForm(ModelForm):
         model = Compra
         fields = ['codigo', 'observacion', 'proveedor',
                   'sub_total', 'descuento', 'total']
+
+
